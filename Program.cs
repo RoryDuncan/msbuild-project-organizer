@@ -9,7 +9,7 @@ namespace csproj_sorter
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static void Main(string target, FileInfo config)
         {
             // create service collection
             var serviceCollection = new ServiceCollection();
@@ -19,7 +19,7 @@ namespace csproj_sorter
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // run app
-            serviceProvider.GetService<App>().Run();
+            serviceProvider.GetService<App>().Run(target, config);
         }
 
         private static void ConfigureServices(IServiceCollection serviceCollection)

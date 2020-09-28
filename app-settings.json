@@ -1,5 +1,6 @@
 {
   "Configuration": {
-    "ConsoleTitle": "csproj sorter"
+    "ConsoleTitle": "csproj sorter",
+    "DefaultConfigFileName": "csprojsort.config.json"
   }
 }

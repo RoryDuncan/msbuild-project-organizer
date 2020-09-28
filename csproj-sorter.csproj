@@ -28,5 +28,7 @@
     <Content Include="Program.cs" />
     <Content Include="App.cs" />
     <Content Include="Services\GroupingService.cs" />
+    <Content Include="Models\AppSettings.cs" />
+    <Content Include="Models\SortSettings.cs" />
   </ItemGroup>
 </Project>
