@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Linq;
+using csproj_sorter.Enums;
 using csproj_sorter.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -6,7 +11,7 @@ namespace csproj_sorter.Services
 {
     public interface IGroupingService
     {
-        void GroupBy();
+        void Group(XDocument document, GroupBy grouping);
     }
 
     public class GroupingService : IGroupingService
@@ -21,9 +26,56 @@ namespace csproj_sorter.Services
             _config = config.Value;
         }
 
-        public void GroupBy()
+        public void Group(XDocument document, GroupBy grouping)
         {
-            throw new System.NotImplementedException();
+            switch (grouping)
+            {
+                case GroupBy.FileType:
+                    this.GroupByFileType(document);
+                    break;
+                case GroupBy.NodeType:
+                    this.GroupByNodeType(document);
+                    break;
+            }
+        }
+
+        private void GroupByFileType(XDocument document)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GroupByNodeType(XDocument document)
+        {
+            var initialGroups = document.Descendants("ItemGroup");
+            List<XElement> allItems = initialGroups.Descendants().ToList();
+            
+            // an empty item group for us to copy from
+            XElement emptyItemGroup = new XElement(XName.Get("ItemGroup", "http://schemas.microsoft.com/developer/msbuild/2003"));
+
+            // group on the name of the node, like <Content />
+            var itemGroups = allItems
+                .GroupBy(el => el.NodeType)
+                .Select(group => {
+                    XElement itemGroup = new XElement(emptyItemGroup);
+
+                        foreach (XElement item in group)
+                        {
+                            itemGroup.Add(item);
+                        }
+
+                    return itemGroup;
+                });
+
+            // remove the existing item groups
+            initialGroups.Remove();
+
+            // and add them in their new groupings, base on GroupBy.NodeType
+            foreach (XElement group in itemGroups)
+            {
+                document.Add(group);
+            }
+
+            document.Save();
         }
     }
 }

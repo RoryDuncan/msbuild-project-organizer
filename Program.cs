@@ -4,12 +4,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using csproj_sorter.Models;
 using csproj_sorter.Services;
+using System.CommandLine;
 
 namespace csproj_sorter
 {
     public class Program
     {
-        public static void Main(string target, FileInfo config)
+        public static void Main(string target)
         {
             // create service collection
             var serviceCollection = new ServiceCollection();
@@ -19,7 +20,7 @@ namespace csproj_sorter
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             // run app
-            serviceProvider.GetService<App>().Run(target, config);
+            serviceProvider.GetService<App>().Run(target);
         }
 
         private static void ConfigureServices(IServiceCollection serviceCollection)

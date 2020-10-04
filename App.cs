@@ -3,6 +3,8 @@ using Microsoft.Extensions.Options;
 using csproj_sorter.Models;
 using csproj_sorter.Services;
 using System.IO;
+using System.Xml.Linq;
+using csproj_sorter.Enums;
 
 namespace csproj_sorter
 {
@@ -12,14 +14,20 @@ namespace csproj_sorter
         private readonly ILogger<App> _logger;
         private readonly AppSettings _config;
         private SortSettings Settings { get; set; }
+        private readonly IXmlService _xmlService;
+        private readonly IGroupingService _groupingService;
 
         public App(ITestService testService,
             IOptions<AppSettings> config,
-            ILogger<App> logger)
+            ILogger<App> logger,
+            IXmlService xmlService,
+            IGroupingService groupingService)
         {
             _testService = testService;
             _logger = logger;
             _config = config.Value;
+            _xmlService = xmlService;
+            _groupingService = groupingService;
         }
 
         public void ConfigureSettings(string configFileName, string directory)
@@ -28,7 +36,7 @@ namespace csproj_sorter
             // todo: read json as SortSettings class
         }
 
-        public void Run(string target, FileInfo config)
+        public void Run(string target)
         {
 
             if (string.IsNullOrWhiteSpace(target)) 
@@ -37,6 +45,10 @@ namespace csproj_sorter
                 System.Console.ReadKey();
                 return;
             }
+
+            XDocument document = _xmlService.GetXML(target);
+            _groupingService.Group(document, GroupBy.NodeType);
+            
 
             _logger.LogInformation($"This is a console application for {_config.ConsoleTitle}");
             _testService.Run();
