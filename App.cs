@@ -38,7 +38,7 @@ namespace csproj_sorter
 
         public void Run(string target)
         {
-
+            _logger.LogInformation($"params: {target}");
             if (string.IsNullOrWhiteSpace(target)) 
             {
                 _logger.LogError($"A --target was not provided. Run this application with a path to a .csproj file as the --target.");
@@ -46,11 +46,12 @@ namespace csproj_sorter
                 return;
             }
 
+            _logger.LogInformation($"Sorting '{target}'...");
+
             XDocument document = _xmlService.GetXML(target);
             _groupingService.Group(document, GroupBy.NodeType);
             
 
-            _logger.LogInformation($"This is a console application for {_config.ConsoleTitle}");
             _testService.Run();
             System.Console.ReadKey();
         }

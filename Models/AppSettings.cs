@@ -10,5 +10,7 @@ namespace csproj_sorter.Models
         /// The default name of the file configuration to look for when running the application
         /// </summary>
         public string DefaultConfigFileName { get; set; }
+
+        public string Description { get; set; }
     }
 }

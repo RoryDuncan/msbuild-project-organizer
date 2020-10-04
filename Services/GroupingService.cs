@@ -75,7 +75,8 @@ namespace csproj_sorter.Services
                 document.Add(group);
             }
 
-            document.Save();
+            //document.Save(Console.Out);
+            Console.WriteLine(document); 
         }
     }
 }
