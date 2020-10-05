@@ -63,24 +63,24 @@ namespace csproj_sorter.Services
 
             // group on the name of the node, like <Content />
             var itemGroups = itemGroupChildren
-                .GroupBy(el => el.Name)
+                .GroupBy(el => el.Name.LocalName)
                 .Select(group => {
                     XElement itemGroup = new XElement(emptyItemGroup);
 
-                        foreach (XElement item in group)
-                        {
-                            //_logger.LogInformation($"Adding child <{item.Name}> to parent <{itemGroup.Name}>");
-                            itemGroup.Add(item);
-                        }
+                    foreach (XElement item in group)
+                    {
+                        itemGroup.Add(item);
+                    }
 
                     return itemGroup;
-                }).ToList();
+                })
+                .ToList();
 
             // remove the existing item groups
             initialGroups.Remove();
 
-            // sort items by name
-            itemGroups.OrderByDescending(group => group.Elements().First().Name);
+            // Sort itemgroups by the name of their first child
+            itemGroups = itemGroups.OrderBy(group => group.Elements().First().Name.LocalName).ToList();
 
             // and add them in their new groupings
             foreach (XElement group in itemGroups)
@@ -117,7 +117,7 @@ namespace csproj_sorter.Services
                     break;
             }
 
-            return $"{element.Name.LocalName}s";
+            return $"{element.Name.LocalName} Includes";
         }
     }
 }
