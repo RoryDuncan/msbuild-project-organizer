@@ -16,6 +16,8 @@ namespace csproj_sorter.Services
 
     public class GroupingService : IGroupingService
     {
+        private readonly string xmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
+
         private readonly ILogger<TestService> _logger;
         private readonly AppSettings _config;
 
@@ -46,38 +48,76 @@ namespace csproj_sorter.Services
 
         public void GroupByNodeType(XDocument document)
         {
-            var projectRoot = document.Element("Project");
-            var initialGroups = projectRoot.Descendants("ItemGroup");
-            List<XElement> allItems = initialGroups.Descendants().ToList();
+            var projectRoot = document.Element(Name("Project"));
+            if (projectRoot == null) {
+                _logger.LogInformation("No <Project> found within document. Nothing to sort.");
+                return;
+            }
+
+            var initialGroups = projectRoot.Descendants(Name("ItemGroup"));
+
+            List<XElement> itemGroupChildren = initialGroups.Elements().ToList();
             
             // an empty item group for us to copy from
-            XElement emptyItemGroup = new XElement(XName.Get("ItemGroup", "http://schemas.microsoft.com/developer/msbuild/2003"));
+            XElement emptyItemGroup = new XElement(Name("ItemGroup"));
 
             // group on the name of the node, like <Content />
-            var itemGroups = allItems
-                .GroupBy(el => el.NodeType)
+            var itemGroups = itemGroupChildren
+                .GroupBy(el => el.Name)
                 .Select(group => {
                     XElement itemGroup = new XElement(emptyItemGroup);
 
                         foreach (XElement item in group)
                         {
+                            //_logger.LogInformation($"Adding child <{item.Name}> to parent <{itemGroup.Name}>");
                             itemGroup.Add(item);
                         }
 
                     return itemGroup;
-                });
+                }).ToList();
 
             // remove the existing item groups
             initialGroups.Remove();
 
-            // and add them in their new groupings, base on GroupBy.NodeType
+            // sort items by name
+            itemGroups.OrderByDescending(group => group.Elements().First().Name);
+
+            // and add them in their new groupings
             foreach (XElement group in itemGroups)
             {
-                projectRoot.Add(group);
+                if (group.HasElements) {
+                    string comment = GetComment(group.Elements().First());
+                    projectRoot.Add(new XComment($" {comment} "));
+                    projectRoot.Add(group);
+                }
             }
 
             //document.Save(Console.Out);
-            Console.WriteLine(document); 
+            Console.WriteLine(document);
+        }
+
+        private XName Name(string name)
+        {
+            return XName.Get(name, xmlns);
+        }
+
+        private string GetComment(XElement element)
+        {
+            switch (element.Name.LocalName)
+            {
+                case "ProjectReference":
+                    return "Project References";
+                case "None":
+                    return "Ignored Files";
+                case "Content":
+                    return "General"; // this group could be further broken up based on file extension
+                case "TypeScriptCompiles":
+                    return "Typescript";
+                default:
+                    break;
+            }
+
+            return $"{element.Name.LocalName}s";
         }
     }
 }

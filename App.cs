@@ -41,8 +41,7 @@ namespace csproj_sorter
             _logger.LogInformation($"params: {target}");
             if (string.IsNullOrWhiteSpace(target)) 
             {
-                _logger.LogError($"A --target was not provided. Run this application with a path to a .csproj file as the --target.");
-                System.Console.ReadKey();
+                _logger.LogError($"A --filename was not provided. Run this application with the name of a .csproj file as the --filename arg.");
                 return;
             }
 
@@ -53,7 +52,6 @@ namespace csproj_sorter
             
 
             _testService.Run();
-            System.Console.ReadKey();
         }
 
     }
