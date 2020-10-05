@@ -1,3 +1,4 @@
 bin/
 obj/
 testfile.xml
+testfile.xml.sorted
