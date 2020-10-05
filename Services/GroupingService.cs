@@ -46,7 +46,8 @@ namespace csproj_sorter.Services
 
         public void GroupByNodeType(XDocument document)
         {
-            var initialGroups = document.Descendants("ItemGroup");
+            var projectRoot = document.Element("Project");
+            var initialGroups = projectRoot.Descendants("ItemGroup");
             List<XElement> allItems = initialGroups.Descendants().ToList();
             
             // an empty item group for us to copy from
@@ -72,7 +73,7 @@ namespace csproj_sorter.Services
             // and add them in their new groupings, base on GroupBy.NodeType
             foreach (XElement group in itemGroups)
             {
-                document.Add(group);
+                projectRoot.Add(group);
             }
 
             //document.Save(Console.Out);
