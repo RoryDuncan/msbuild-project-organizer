@@ -3,16 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using csproj_sorter.Enums;
+using csproj_sorter.Interfaces;
 using csproj_sorter.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
+
 namespace csproj_sorter.Services
 {
-    public interface IGroupingService
-    {
-        void Group(XDocument document, GroupBy grouping);
-    }
 
     public class GroupingService : IGroupingService
     {
@@ -28,30 +26,38 @@ namespace csproj_sorter.Services
             _config = config.Value;
         }
 
-        public void Group(XDocument document, GroupBy grouping)
+        /// <summary>
+        /// Groups and sorts the XDocument's ItemGroup. Returns a bool indicating if the document was modified or not.
+        /// </summary>
+        public bool Group(XDocument document, GroupBy grouping)
         {
             switch (grouping)
             {
                 case GroupBy.FileType:
-                    this.GroupByFileType(document);
-                    break;
+                    return this.GroupByFileType(document);
                 case GroupBy.NodeType:
-                    this.GroupByNodeType(document);
-                    break;
+                    return this.GroupByNodeType(document);
             }
+
+            return false;
         }
 
-        private void GroupByFileType(XDocument document)
+        private bool GroupByFileType(XDocument document)
         {
             throw new NotImplementedException();
         }
 
-        public void GroupByNodeType(XDocument document)
+    /// <summary>
+    /// Groups and sorts the XDocument's ItemGroup. Returns a bool indicating if the document was modified or not.
+    /// </summary>
+    /// <param name="document"></param>
+    /// <returns></returns>
+        public bool GroupByNodeType(XDocument document)
         {
             var projectRoot = document.Element(Name("Project"));
             if (projectRoot == null) {
                 _logger.LogInformation("No <Project> found within document. Nothing to sort.");
-                return;
+                return false;
             }
 
             var initialGroups = projectRoot.Descendants(Name("ItemGroup"));
@@ -92,8 +98,7 @@ namespace csproj_sorter.Services
                 }
             }
 
-            //document.Save(Console.Out);
-            Console.WriteLine(document);
+            return true;
         }
 
         private XName Name(string name)

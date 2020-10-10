@@ -1,4 +1,5 @@
 using System.IO;
+using csproj_sorter.Interfaces;
 using csproj_sorter.Models;
 using csproj_sorter.Services;
 using Microsoft.Extensions.Configuration;

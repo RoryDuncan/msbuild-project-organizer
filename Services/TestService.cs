@@ -1,14 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using csproj_sorter.Models;
+using csproj_sorter.Interfaces;
 
 namespace csproj_sorter.Services
 {
-    public interface ITestService
-    {
-        void Run();
-    }
-
     public class TestService : ITestService
     {
         private readonly ILogger<TestService> _logger;

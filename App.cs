@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using csproj_sorter.Enums;
 using System.Xml;
 using System.Text;
+using csproj_sorter.Interfaces;
 
 namespace csproj_sorter
 {
@@ -49,29 +50,18 @@ namespace csproj_sorter
 
             _logger.LogInformation($"Sorting '{input}'...");
 
-            XDocument document = _xmlService.GetXML(input);
-            _groupingService.Group(document, GroupBy.NodeType);
-            _logger.LogInformation("Sort complete.");
+            XDocument document = _xmlService.GetDocument(input);
+            bool wasModified = _groupingService.Group(document, GroupBy.NodeType);
 
-            SaveDocument($"{input}.sorted", document);
+            if (wasModified) {
+                _logger.LogInformation("Sort complete.");
+                _xmlService.SaveDocument($"{input}.sorted", document);
+            }
+
+            _logger.LogInformation("Done.");
 
             // _testService.Run();
         }
 
-        public void SaveDocument(string fileName, XDocument document)
-        {
-            _logger.LogInformation($"Saving Document as {fileName}.");
-
-            var settings = new XmlWriterSettings()
-            {
-                Indent = true,
-            };
-
-            using (XmlWriter writer = XmlWriter.Create(fileName, settings))
-            {
-                document.Save(writer);
-            }
-            _logger.LogInformation("Done.");
-        }
     }
 }
