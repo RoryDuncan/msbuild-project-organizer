@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Xml.Linq;
 using csproj_sorter.Interfaces;
@@ -15,10 +16,10 @@ namespace csproj_sorter.Services
     {
         private readonly string xmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
 
-        private readonly ILogger<TestService> _logger;
+        private readonly ILogger<GroupingService> _logger;
         private readonly AppSettings _config;
 
-        public GroupingService(ILogger<TestService> logger,
+        public GroupingService(ILogger<GroupingService> logger,
             IOptions<AppSettings> config)
         {
             _logger = logger;
@@ -30,17 +31,16 @@ namespace csproj_sorter.Services
         /// </summary>
         public bool Group(XDocument document)
         {
-            bool wasModified = false;
-            
-            wasModified = this.GroupByNodeType(document);
-            wasModified = this.GroupByFileType(document);
+            if (!HasProjectRoot(document))
+            {
+                _logger.LogInformation("No <Project> found within document. Nothing to sort.");
+                return false;
+            }
 
-            return wasModified;
-        }
+            this.GroupByNodeType(document);
+            this.ThenByFileType(document);
 
-        private bool GroupByFileType(XDocument document)
-        {
-            throw new NotImplementedException();
+            return true;
         }
 
     /// <summary>
@@ -48,26 +48,21 @@ namespace csproj_sorter.Services
     /// </summary>
     /// <param name="document"></param>
     /// <returns></returns>
-        public bool GroupByNodeType(XDocument document)
+        public void GroupByNodeType(XDocument document)
         {
             var projectRoot = document.Element(Name("Project"));
-            if (projectRoot == null) {
-                _logger.LogInformation("No <Project> found within document. Nothing to sort.");
-                return false;
-            }
 
-            var initialGroups = projectRoot.Descendants(Name("ItemGroup"));
+            var initialGroups = projectRoot
+                .Descendants(Name("ItemGroup"))
+                .Where( group => group.Attribute("Condition") is null); // only operate on ItemGroups without "Condition" attributes
 
             List<XElement> itemGroupChildren = initialGroups.Elements().ToList();
-            
-            // an empty item group for us to copy from
-            XElement emptyItemGroup = new XElement(Name("ItemGroup"));
 
             // group on the name of the node, like <Content />
             var itemGroups = itemGroupChildren
                 .GroupBy(el => el.Name.LocalName)
                 .Select(group => {
-                    XElement itemGroup = new XElement(emptyItemGroup);
+                    XElement itemGroup = CreateItemGroup();
 
                     foreach (XElement item in group)
                     {
@@ -87,14 +82,84 @@ namespace csproj_sorter.Services
             // and add them in their new groupings
             foreach (XElement group in itemGroups)
             {
-                if (group.HasElements) {
-                    string comment = GetComment(group.Elements().First());
-                    projectRoot.Add(new XComment($" {comment} "));
+                if (group.HasElements) 
+                {
+                    // Add a label corrosponding to the itemgroup's contents
+                    var label = GetLabel(group.Elements().First());
+                    group.SetAttributeValue("Label", label);
+
                     projectRoot.Add(group);
                 }
             }
 
-            return true;
+        }
+
+        public void ThenByFileType(XDocument document)
+        {
+            var projectRoot = document.Element(Name("Project"));
+
+            // we can assume all item groups are of the same XElement type
+            List<XElement> itemGroups = projectRoot.Descendants(Name("ItemGroup")).ToList();
+
+            int initialCount = itemGroups.Count;
+            _logger.LogDebug($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
+
+            itemGroups
+                .Where( itemGroup => this.IsFileType(itemGroup.Elements().First()))
+                .ToList()
+                .ForEach( itemGroup => {
+                    Dictionary<string, XElement> newItemGroups = new Dictionary<string, XElement>();
+                    string label = (string)itemGroup.Attribute("Label") ?? string.Empty;
+                    // for each item of the group, check it's file type and add it to an itemgroup of similar filetypes
+                    itemGroup.Elements().ToList().ForEach( element => {
+                        string fileType = GetFileExtension(element) ?? "none";
+
+                        if (!newItemGroups.ContainsKey(fileType))
+                        {
+                            _logger.LogInformation($"Creating <ItemGroup> for '{fileType}' filetype");
+                            var group = CreateItemGroup();
+                            group.SetAttributeValue("Label", $"{label}:{fileType}");
+                            newItemGroups.Add(fileType, CreateItemGroup());
+                        }
+                        
+                        newItemGroups
+                            .GetValueOrDefault(fileType)
+                            .Add(element);
+                    });
+
+                    // if there's only 1 filetype in this ItemGroup, no need to make changes
+                    if (newItemGroups.Count > 1)
+                    {
+                        // add the new filetype-grouped <ItemGroup>'s immediately after this group
+                        _logger.LogInformation($"<ItemGroup> split into {newItemGroups.Count} filetypes");
+                        newItemGroups
+                            .ToList()
+                            .ForEach( kvp => itemGroup.AddAfterSelf(kvp.Value));
+
+                        // remove the original <ItemGroup>
+                        itemGroup.Remove();
+                    }
+                });
+
+            // log how it's changed
+            int resultingCount = projectRoot.Descendants(Name("ItemGroup")).ToList().Count;
+            _logger.LogDebug($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
+        }
+
+        private string GetFileExtension(XElement element)
+        {
+            XAttribute includeAttr = element.Attribute("Include");
+            if (includeAttr is null)
+            {
+                return null;
+            }
+
+            return Path.GetExtension(includeAttr.Value);
+        }
+
+        private bool IsFileType(XElement element)
+        {
+            return _config.FileTypeItems.Contains(element.Name.LocalName);
         }
 
         private XName Name(string name)
@@ -102,7 +167,18 @@ namespace csproj_sorter.Services
             return XName.Get(name, xmlns);
         }
 
-        private string GetComment(XElement element)
+        private bool HasProjectRoot(XDocument document)
+        {
+            XElement projectRoot = document.Element(Name("Project"));
+            return !(projectRoot is null);
+        }
+
+        private XElement CreateItemGroup()
+        {
+            return new XElement(Name("ItemGroup"));
+        }
+
+        private string GetLabel(XElement element)
         {
             switch (element.Name.LocalName)
             {

@@ -10,15 +10,16 @@ namespace csproj_sorter.Services
 {
     public class XmlService : IXmlService
     {
-        private readonly ILogger<TestService> _logger;
+        private readonly ILogger<XmlService> _logger;
 
-        public XmlService(ILogger<TestService> logger)
+        public XmlService(ILogger<XmlService> logger)
         {
             _logger = logger;
         }
 
         public XDocument GetDocument(string filePath)
         {
+            _logger.LogInformation($"Loading Document: {filePath}.");
             XDocument document = XDocument.Load(filePath);
             return document;
         }
