@@ -2,6 +2,7 @@
   "Configuration": {
     "ConsoleTitle": "csproj sorter",
     "DefaultConfigFileName": "csprojsort.config.json",
-    "Description": "Sorts a .csproj file"
+    "Description": "Sorts a .csproj file",
+    "FileTypeItems": ["Content", "Compile", "None", "EmbeddedResource"]
   }
 }

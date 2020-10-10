@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace csproj_sorter.Models
 {
     public class AppSettings
@@ -12,5 +14,6 @@ namespace csproj_sorter.Models
         public string DefaultConfigFileName { get; set; }
 
         public string Description { get; set; }
+        public List<string> FileTypeItems { get; set; }
     }
 }
