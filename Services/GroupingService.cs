@@ -102,24 +102,29 @@ namespace csproj_sorter.Services
             List<XElement> itemGroups = projectRoot.Descendants(Name("ItemGroup")).ToList();
 
             int initialCount = itemGroups.Count;
-            _logger.LogDebug($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
+            _logger.LogInformation($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
 
             itemGroups
                 .Where( itemGroup => this.IsFileType(itemGroup.Elements().First()))
                 .ToList()
                 .ForEach( itemGroup => {
                     Dictionary<string, XElement> newItemGroups = new Dictionary<string, XElement>();
-                    string label = (string)itemGroup.Attribute("Label") ?? string.Empty;
+                    string previousLabel = (string)itemGroup.Attribute("Label") ?? string.Empty;
                     // for each item of the group, check it's file type and add it to an itemgroup of similar filetypes
                     itemGroup.Elements().ToList().ForEach( element => {
                         string fileType = GetFileExtension(element) ?? "none";
+                        string label = $"{fileType} files";
 
                         if (!newItemGroups.ContainsKey(fileType))
                         {
-                            _logger.LogInformation($"Creating <ItemGroup> for '{fileType}' filetype");
+                            _logger.LogInformation($"Creating <ItemGroup Label=\"{label}\">");
                             var group = CreateItemGroup();
-                            group.SetAttributeValue("Label", $"{label}:{fileType}");
+                            group.SetAttributeValue(Name("Label"), label);
                             newItemGroups.Add(fileType, CreateItemGroup());
+                        }
+                        else
+                        {
+                            _logger.LogInformation($"Adding to <ItemGroup Label=\"{label}\">");
                         }
                         
                         newItemGroups
@@ -143,7 +148,7 @@ namespace csproj_sorter.Services
 
             // log how it's changed
             int resultingCount = projectRoot.Descendants(Name("ItemGroup")).ToList().Count;
-            _logger.LogDebug($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
+            _logger.LogInformation($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
         }
 
         private string GetFileExtension(XElement element)
