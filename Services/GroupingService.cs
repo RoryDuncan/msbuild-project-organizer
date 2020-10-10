@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using csproj_sorter.Enums;
 using csproj_sorter.Interfaces;
 using csproj_sorter.Models;
 using Microsoft.Extensions.Logging;
@@ -29,17 +28,14 @@ namespace csproj_sorter.Services
         /// <summary>
         /// Groups and sorts the XDocument's ItemGroup. Returns a bool indicating if the document was modified or not.
         /// </summary>
-        public bool Group(XDocument document, GroupBy grouping)
+        public bool Group(XDocument document)
         {
-            switch (grouping)
-            {
-                case GroupBy.FileType:
-                    return this.GroupByFileType(document);
-                case GroupBy.NodeType:
-                    return this.GroupByNodeType(document);
-            }
+            bool wasModified = false;
+            
+            wasModified = this.GroupByNodeType(document);
+            wasModified = this.GroupByFileType(document);
 
-            return false;
+            return wasModified;
         }
 
         private bool GroupByFileType(XDocument document)

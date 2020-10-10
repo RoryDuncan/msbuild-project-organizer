@@ -1,12 +1,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using csproj_sorter.Models;
-using csproj_sorter.Services;
-using System.IO;
 using System.Xml.Linq;
-using csproj_sorter.Enums;
-using System.Xml;
-using System.Text;
 using csproj_sorter.Interfaces;
 
 namespace csproj_sorter
@@ -41,17 +36,18 @@ namespace csproj_sorter
 
         public void Run(string input)
         {
-            _logger.LogInformation($"params: {input}");
-            if (string.IsNullOrWhiteSpace(input)) 
+            if (!IsValid(input))
             {
-                _logger.LogError($"A --filename was not provided. Run this application with the name of a .csproj file as the --filename arg.");
                 return;
             }
 
             _logger.LogInformation($"Sorting '{input}'...");
 
+            // load the document
             XDocument document = _xmlService.GetDocument(input);
-            bool wasModified = _groupingService.Group(document, GroupBy.NodeType);
+
+            // sort the items
+            bool wasModified = _groupingService.Group(document);
 
             if (wasModified) {
                 _logger.LogInformation("Sort complete.");
@@ -61,6 +57,18 @@ namespace csproj_sorter
             _logger.LogInformation("Done.");
 
             // _testService.Run();
+        }
+
+        private bool IsValid(string input) 
+        {
+            _logger.LogInformation($"params: {input}");
+            if (string.IsNullOrWhiteSpace(input)) 
+            {
+                _logger.LogError($"A --filename was not provided. Run this application with the name of a .csproj file as the --filename arg.");
+                return false;
+            }
+
+            return true;
         }
 
     }
