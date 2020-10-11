@@ -5,7 +5,7 @@
     "Description": "Sorts a .csproj file",
     "FileTypeItems": ["Content", "Compile", "TypeScriptCompile", "EmbeddedResource"],
     "Groupings": {
-      "Images": [".png", ".jpg", ".jpeg", "gif", ".tiff", ".ico", ".icon", "webp", ".svg", ".bmp"]
+      "Images": [".png", ".jpg", ".jpeg", ".gif", ".tiff", ".ico", ".icon", "webp", ".svg", ".bmp"]
     }
   }
 }

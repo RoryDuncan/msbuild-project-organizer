@@ -89,7 +89,7 @@ namespace csproj_sorter.Services
                     // Add a label corrosponding to the itemgroup's contents
                     string label = this.GetLabel(group.Elements().First());
 
-                    var comment = new XComment(label);
+                    var comment = new XComment($" {label} ");
                     projectRoot.Add(comment);
                     projectRoot.Add(group);
                 }
@@ -145,7 +145,14 @@ namespace csproj_sorter.Services
                 .OrderBy( item => item.Attribute("Include").Value)
                 .ToList();
 
+            // replaceAll will remove all attributes, so we need to copy them first
+            IEnumerable<XAttribute> attributes = itemGroup.Attributes().ToList();
+
+            // update with our sorted children
             itemGroup.ReplaceAll(sortedItems);
+
+            // and re-apply them
+            itemGroup.ReplaceAttributes(attributes);
 
         }
 
@@ -178,13 +185,7 @@ namespace csproj_sorter.Services
                         value.SetAttributeValue("Label", label);
                     }
 
-                    _logger.LogInformation($"Created {key}");
-
                     newItemGroups.Add(key, value);
-                }
-                else
-                {
-                    _logger.LogInformation($"Adding to {key}");
                 }
 
                 newItemGroups
@@ -195,7 +196,6 @@ namespace csproj_sorter.Services
             if (newItemGroups.Count > 0)
             {
                 // add the new filetype-grouped <ItemGroup>'s immediately after this group
-                _logger.LogInformation($"<ItemGroup> split into {newItemGroups.Count} filetypes");
 
                 // add back to document
                 newItemGroups
@@ -250,7 +250,7 @@ namespace csproj_sorter.Services
             }
 
             var match = _config.Groupings
-                .Where(kvp => kvp.Value.Contains(fileType, StringComparer.InvariantCulture));
+                .Where(kvp => kvp.Value.Contains(fileType, StringComparer.InvariantCultureIgnoreCase));
 
             if (match.Count() == 0)
             {
