@@ -11,6 +11,10 @@ namespace CSProjOrganizer.Tests
     {
 
         private readonly IXmlService _xmlService;
+        private string TestFile(string fileName)
+        {
+            return $"files/{fileName}";
+        }
 
         public XMLServiceTests()
         {
@@ -20,6 +24,7 @@ namespace CSProjOrganizer.Tests
         [Fact]
         public void CanLoadFile()
         {
+            _xmlService.GetDocument(TestFile("empty-project.csproj"));
 
         }
     }
