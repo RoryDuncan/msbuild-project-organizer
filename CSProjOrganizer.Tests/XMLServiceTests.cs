@@ -1,4 +1,8 @@
 using System;
+using CSProjOrganizer.Interfaces;
+using CSProjOrganizer.Services;
+using Microsoft.Extensions.Logging;
+using Moq;
 using Xunit;
 
 namespace CSProjOrganizer.Tests
@@ -10,7 +14,8 @@ namespace CSProjOrganizer.Tests
 
         public XMLServiceTests()
         {
-
+            var logger = Mock.Of<ILogger<XmlService>>();
+            _xmlService = new XmlService(logger);
         }
         [Fact]
         public void CanLoadFile()
