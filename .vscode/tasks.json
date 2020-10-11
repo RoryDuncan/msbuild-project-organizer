@@ -39,9 +39,7 @@
             "type": "shell",
             "dependsOn": ["build"],
             "args": [
-                "run",
-                "--",
-                "--filename=testfile.xml"
+                "test"
             ],
             "group": "test",
             "presentation": {
