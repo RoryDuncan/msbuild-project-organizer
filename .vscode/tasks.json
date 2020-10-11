@@ -7,7 +7,6 @@
             "label": "Build Solution",
             "command": "dotnet",
             "type": "shell",
-            "dependsOn": ["Format All C#"],
             "args": [
                 "build",
                 // Ask dotnet build to generate full paths for file names.

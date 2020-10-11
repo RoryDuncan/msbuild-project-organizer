@@ -8,20 +8,17 @@ namespace CSProjOrganizer
 {
     public class App
     {
-        private readonly ITestService _testService;
         private readonly ILogger<App> _logger;
         private readonly AppSettings _config;
         private SortSettings Settings { get; set; }
         private readonly IXmlService _xmlService;
         private readonly IGroupingService _groupingService;
 
-        public App(ITestService testService,
-            IOptions<AppSettings> config,
-            ILogger<App> logger,
-            IXmlService xmlService,
-            IGroupingService groupingService)
+        public App(IOptions<AppSettings> config,
+                   ILogger<App> logger,
+                   IXmlService xmlService,
+                   IGroupingService groupingService)
         {
-            _testService = testService;
             _logger = logger;
             _config = config.Value;
             _xmlService = xmlService;
@@ -56,8 +53,6 @@ namespace CSProjOrganizer
             }
 
             _logger.LogInformation("Done.");
-
-            // _testService.Run();
         }
 
         private bool IsValid(string input)

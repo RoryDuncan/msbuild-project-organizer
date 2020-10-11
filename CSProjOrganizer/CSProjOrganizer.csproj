@@ -32,7 +32,6 @@
     <Content Include="Models\AppSettings.cs" />
     <Content Include="Models\SortSettings.cs" />
     <Content Include="interfaces\IXmlService.cs" />
-    <Content Include="interfaces\ITestService.cs" />
     <Content Include="interfaces\IGroupingService.cs" />
     <Content Include="Services\XmlService.cs" />
     <Content Include="AppServices.cs" />

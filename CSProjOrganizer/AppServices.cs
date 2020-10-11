@@ -39,7 +39,6 @@ namespace CSProjOrganizer
 
         private static void AddServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddTransient<ITestService, TestService>();
             serviceCollection.AddSingleton<IXmlService, XmlService>();
             serviceCollection.AddSingleton<IGroupingService, GroupingService>();
 
