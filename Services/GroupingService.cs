@@ -149,7 +149,6 @@ namespace csproj_sorter.Services
             // for each item of the group, check it's file type and add it to an itemgroup of similar filetypes
             itemGroup.Elements().ToList().ForEach(element =>
             {
-
                 string filePath = this.GetFilePath(element) ?? null;
                 string fileType = this.GetFileExtension(filePath) ?? null;
                 string label = this.GetGroupingLabelOrDefault(fileType, filePath);
@@ -164,13 +163,13 @@ namespace csproj_sorter.Services
                         value.SetAttributeValue("Label", label);
                     }
 
-                    _logger.LogInformation($"Created {value.Name}");
+                    _logger.LogInformation($"Created {key}");
 
                     newItemGroups.Add(key, value);
                 }
                 else
                 {
-                    _logger.LogInformation($"Adding to {newItemGroups.GetValueOrDefault(key).Name}");
+                    _logger.LogInformation($"Adding to {key}");
                 }
 
                 newItemGroups
