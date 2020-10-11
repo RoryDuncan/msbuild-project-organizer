@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "Build Solution",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -21,7 +21,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "run",
+            "label": "Run Application",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -34,7 +34,7 @@
             "problemMatcher": "$msCompile"
         },
         {
-            "label": "test",
+            "label": "Run Tests",
             "command": "dotnet",
             "type": "shell",
             "dependsOn": ["build"],
