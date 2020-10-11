@@ -49,7 +49,8 @@ namespace CSProjOrganizer
             // sort the items
             bool wasModified = _groupingService.Group(document);
 
-            if (wasModified) {
+            if (wasModified)
+            {
                 _logger.LogInformation("Sort complete.");
                 _xmlService.SaveDocument($"{input}.sorted", document);
             }

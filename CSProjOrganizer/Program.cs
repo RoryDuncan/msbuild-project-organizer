@@ -32,7 +32,8 @@ namespace CSProjOrganizer
             rootCommand.Description = appSettings.Value.Description;
 
             // Note that the parameters of the handler method are matched according to the names of the options
-            rootCommand.Handler = CommandHandler.Create<string>((string fileName) => {
+            rootCommand.Handler = CommandHandler.Create<string>((string fileName) =>
+            {
                 serviceProvider.GetService<App>().Run(fileName);
             });
 

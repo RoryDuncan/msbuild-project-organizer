@@ -54,7 +54,7 @@ namespace CSProjOrganizer.Services
         {
             var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
-             // only operate on ItemGroups without "Condition" attributes
+            // only operate on ItemGroups without "Condition" attributes
             var initialGroups = itemGroups.Where(group => group.Attribute("Condition") is null);
 
             List<XElement> itemGroupChildren = initialGroups.Elements().ToList();
@@ -134,7 +134,7 @@ namespace CSProjOrganizer.Services
         {
             var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
-            itemGroups.ForEach( group => this.SortItemGroup(group));
+            itemGroups.ForEach(group => this.SortItemGroup(group));
         }
 
         private void SortItemGroup(XElement itemGroup)
@@ -142,8 +142,8 @@ namespace CSProjOrganizer.Services
             var children = itemGroup.Elements().ToList();
 
             var sortedItems = itemGroup.Elements()
-                .OrderBy( item => this.GetFileExtension(this.GetFilePath(item)))
-                .ThenBy( item => this.GetFilePath(item))
+                .OrderBy(item => this.GetFileExtension(this.GetFilePath(item)))
+                .ThenBy(item => this.GetFilePath(item))
                 .ToList();
 
             // replaceAll will remove all attributes, so we need to copy them first
