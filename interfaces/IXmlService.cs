@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace csproj_sorter.Interfaces
+namespace CSProjOrganizer.Interfaces
 {
     public interface IXmlService
     {

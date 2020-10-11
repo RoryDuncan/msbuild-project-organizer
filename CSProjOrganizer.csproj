@@ -2,9 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AssemblyName>csproj_sorter</AssemblyName>
+    <AssemblyName>CSProjOrganizer</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PackageId>csproj_sorter</PackageId>
+    <PackageId>CSProjOrganizer</PackageId>
     <RuntimeIdentifiers>win10-x86;win10-x64</RuntimeIdentifiers>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

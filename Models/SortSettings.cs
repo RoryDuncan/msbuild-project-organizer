@@ -1,7 +1,7 @@
-namespace csproj_sorter.Models
+namespace CSProjOrganizer.Models
 {
     public class SortSettings
     {
-        
+
     }
 }

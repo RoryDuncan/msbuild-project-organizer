@@ -1,9 +1,9 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using csproj_sorter.Models;
-using csproj_sorter.Interfaces;
+using CSProjOrganizer.Models;
+using CSProjOrganizer.Interfaces;
 
-namespace csproj_sorter.Services
+namespace CSProjOrganizer.Services
 {
     public class TestService : ITestService
     {

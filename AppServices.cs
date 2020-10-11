@@ -1,24 +1,24 @@
 using System.IO;
-using csproj_sorter.Interfaces;
-using csproj_sorter.Models;
-using csproj_sorter.Services;
+using CSProjOrganizer.Interfaces;
+using CSProjOrganizer.Models;
+using CSProjOrganizer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace csproj_sorter
+namespace CSProjOrganizer
 {
     public class AppServices
     {
         public static IServiceCollection Configure()
         {
             IServiceCollection serviceCollection = new ServiceCollection();
-            
+
             // add logging
             serviceCollection.AddSingleton(new LoggerFactory()
                 .AddConsole()
                 .AddDebug());
-            serviceCollection.AddLogging(); 
+            serviceCollection.AddLogging();
 
             // build configuration
             var configuration = new ConfigurationBuilder()

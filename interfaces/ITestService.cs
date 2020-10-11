@@ -1,4 +1,4 @@
-namespace csproj_sorter.Interfaces
+namespace CSProjOrganizer.Interfaces
 {
     public interface ITestService
     {

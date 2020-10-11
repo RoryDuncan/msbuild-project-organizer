@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
-using csproj_sorter.Interfaces;
-using csproj_sorter.Models;
+using CSProjOrganizer.Interfaces;
+using CSProjOrganizer.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 
-namespace csproj_sorter.Services
+namespace CSProjOrganizer.Services
 {
 
     public class GroupingService : IGroupingService

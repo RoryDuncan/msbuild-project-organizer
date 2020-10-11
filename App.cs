@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using csproj_sorter.Models;
+using CSProjOrganizer.Models;
 using System.Xml.Linq;
-using csproj_sorter.Interfaces;
+using CSProjOrganizer.Interfaces;
 
-namespace csproj_sorter
+namespace CSProjOrganizer
 {
     public class App
     {
@@ -59,10 +59,10 @@ namespace csproj_sorter
             // _testService.Run();
         }
 
-        private bool IsValid(string input) 
+        private bool IsValid(string input)
         {
             _logger.LogInformation($"params: {input}");
-            if (string.IsNullOrWhiteSpace(input)) 
+            if (string.IsNullOrWhiteSpace(input))
             {
                 _logger.LogError($"A --filename was not provided. Run this application with the name of a .csproj file as the --filename arg.");
                 return false;

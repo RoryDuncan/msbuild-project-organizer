@@ -1,8 +1,8 @@
 {
   "Configuration": {
-    "ConsoleTitle": "csproj sorter",
+    "ConsoleTitle": "csproj organizer",
     "DefaultConfigFileName": "csprojsort.config.json",
-    "Description": "Sorts a .csproj file",
+    "Description": "Sorts and organizes a .csproj file",
     "FileTypeItems": ["Content", "Compile", "TypeScriptCompile", "EmbeddedResource"],
     "FileTypeGroupings": {
       "Images": [".png", ".jpg", ".jpeg", ".gif", ".tiff", ".ico", ".icon", "webp", ".svg", ".bmp"],

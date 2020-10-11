@@ -2,15 +2,15 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using csproj_sorter.Models;
-using csproj_sorter.Services;
+using CSProjOrganizer.Models;
+using CSProjOrganizer.Services;
 
 using System.CommandLine;
 using System.CommandLine.Invocation;
 using System;
 using Microsoft.Extensions.Options;
 
-namespace csproj_sorter
+namespace CSProjOrganizer
 {
     public class Program
     {
