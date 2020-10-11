@@ -43,25 +43,26 @@ namespace csproj_sorter.Services
             return true;
         }
 
-    /// <summary>
-    /// Groups and sorts the XDocument's ItemGroup. Returns a bool indicating if the document was modified or not.
-    /// </summary>
-    /// <param name="document"></param>
-    /// <returns></returns>
+        /// <summary>
+        /// Groups and sorts the XDocument's ItemGroup. Returns a bool indicating if the document was modified or not.
+        /// </summary>
+        /// <param name="document"></param>
+        /// <returns></returns>
         public void GroupByNodeType(XDocument document)
         {
             var projectRoot = document.Element(Name("Project"));
 
             var initialGroups = projectRoot
                 .Descendants(Name("ItemGroup"))
-                .Where( group => group.Attribute("Condition") is null); // only operate on ItemGroups without "Condition" attributes
+                .Where(group => group.Attribute("Condition") is null); // only operate on ItemGroups without "Condition" attributes
 
             List<XElement> itemGroupChildren = initialGroups.Elements().ToList();
 
             // group on the name of the node, like <Content />
             var itemGroups = itemGroupChildren
                 .GroupBy(el => el.Name.LocalName)
-                .Select(group => {
+                .Select(group =>
+                {
                     XElement itemGroup = CreateItemGroup();
 
                     foreach (XElement item in group)
@@ -110,64 +111,9 @@ namespace csproj_sorter.Services
             _logger.LogInformation($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
 
             itemGroups
-                .Where( itemGroup => itemGroup.HasElements && this.IsItemWithFileTypeAttributes(itemGroup.Elements().First()))
+                .Where(itemGroup => itemGroup.HasElements && this.IsItemWithFileTypeAttributes(itemGroup.Elements().First()))
                 .ToList()
-                .ForEach( itemGroup => {
-                    Dictionary<string, XElement> newItemGroups = new Dictionary<string, XElement>();
-                    string previousLabel = (string)itemGroup.Attribute("Label") ?? string.Empty;
-                    // for each item of the group, check it's file type and add it to an itemgroup of similar filetypes
-                    itemGroup.Elements().ToList().ForEach( element => {
-
-                        string filePath = this.GetFilePath(element) ?? null;
-                        string fileType = this.GetFileExtension(filePath) ?? null;
-                        string label = this.GetGroupingLabelOrDefault(fileType, filePath);
-                        string key = label ?? "__misc__";
-
-                        if (!newItemGroups.ContainsKey(key))
-                        {
-                            XElement value = this.CreateItemGroup();
-
-                            if (label != null)
-                            {
-                                value.SetAttributeValue("Label", label);
-                            }
-
-                            _logger.LogInformation($"Created {value.Name}");
-
-                            newItemGroups.Add(key, value);
-                        }
-                        else
-                        {
-                            _logger.LogInformation($"Adding to {newItemGroups.GetValueOrDefault(key).Name}");
-                        }
-                        
-                        newItemGroups
-                            .GetValueOrDefault(key)
-                            .Add(element);
-                    });
-
-                    if (newItemGroups.Count == 0)
-                    {
-                        return;
-                    }
-                    // if there's only 1 filetype in this ItemGroup, no need to make changes
-                    else if (newItemGroups.Count > 1)
-                    {
-                        // add the new filetype-grouped <ItemGroup>'s immediately after this group
-                        _logger.LogInformation($"<ItemGroup> split into {newItemGroups.Count} filetypes");
-                        newItemGroups
-                            .ToList()
-                            .ForEach( kvp => itemGroup.AddAfterSelf(kvp.Value));
-
-                        // remove the original <ItemGroup>
-                        itemGroup.Remove();
-                    }
-                    else
-                    {
-                        string label = newItemGroups.Keys.First();
-                        itemGroup.SetAttributeValue("Label", label);
-                    }
-                });
+                .ForEach(itemGroup => OrganizeItemGroup(itemGroup));
 
             // log how it's changed
             int resultingCount = projectRoot.Descendants(Name("ItemGroup")).ToList().Count;
@@ -183,9 +129,68 @@ namespace csproj_sorter.Services
             List<XElement> itemGroups = projectRoot.Descendants(Name("ItemGroup")).ToList();
 
             itemGroups
-                .Where( g => !g.HasElements)
+                .Where(g => !g.HasElements)
                 .ToList()
-                .ForEach( emptyGroup => emptyGroup.Remove());
+                .ForEach(emptyGroup => emptyGroup.Remove());
+        }
+
+        private void OrganizeItemGroup(XElement itemGroup)
+        {
+            Dictionary<string, XElement> newItemGroups = new Dictionary<string, XElement>();
+            string previousLabel = (string)itemGroup.Attribute("Label") ?? string.Empty;
+            // for each item of the group, check it's file type and add it to an itemgroup of similar filetypes
+            itemGroup.Elements().ToList().ForEach(element =>
+            {
+
+                string filePath = this.GetFilePath(element) ?? null;
+                string fileType = this.GetFileExtension(filePath) ?? null;
+                string label = this.GetGroupingLabelOrDefault(fileType, filePath);
+                string key = label ?? "__misc__";
+
+                if (!newItemGroups.ContainsKey(key))
+                {
+                    XElement value = this.CreateItemGroup();
+
+                    if (label != null)
+                    {
+                        value.SetAttributeValue("Label", label);
+                    }
+
+                    _logger.LogInformation($"Created {value.Name}");
+
+                    newItemGroups.Add(key, value);
+                }
+                else
+                {
+                    _logger.LogInformation($"Adding to {newItemGroups.GetValueOrDefault(key).Name}");
+                }
+
+                newItemGroups
+                    .GetValueOrDefault(key)
+                    .Add(element);
+            });
+
+            if (newItemGroups.Count == 0)
+            {
+                return;
+            }
+            // if there's only 1 filetype in this ItemGroup, no need to make changes
+            else if (newItemGroups.Count > 1)
+            {
+                // add the new filetype-grouped <ItemGroup>'s immediately after this group
+                _logger.LogInformation($"<ItemGroup> split into {newItemGroups.Count} filetypes");
+                newItemGroups
+                    .ToList()
+                    .ForEach(kvp => itemGroup.AddAfterSelf(kvp.Value));
+
+                // remove the original <ItemGroup>
+                itemGroup.Remove();
+            }
+            else
+            {
+                string label = newItemGroups.Keys.First();
+                itemGroup.SetAttributeValue("Label", label);
+            }
         }
 
         /// <summary>
@@ -231,7 +236,7 @@ namespace csproj_sorter.Services
             }
 
             var match = _config.Groupings
-                .Where( kvp => kvp.Value.Contains(fileType, StringComparer.InvariantCulture));
+                .Where(kvp => kvp.Value.Contains(fileType, StringComparer.InvariantCulture));
 
             if (match.Count() == 0)
             {
