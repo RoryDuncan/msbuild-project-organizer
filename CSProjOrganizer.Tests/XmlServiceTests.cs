@@ -1,4 +1,3 @@
-using System;
 using CSProjOrganizer.Interfaces;
 using CSProjOrganizer.Services;
 using Microsoft.Extensions.Logging;
@@ -7,7 +6,7 @@ using Xunit;
 
 namespace CSProjOrganizer.Tests
 {
-    public class XMLServiceTests
+    public class XmlServiceTests
     {
 
         private readonly IXmlService _xmlService;
@@ -16,7 +15,7 @@ namespace CSProjOrganizer.Tests
             return $"files/{fileName}";
         }
 
-        public XMLServiceTests()
+        public XmlServiceTests()
         {
             var logger = Mock.Of<ILogger<XmlService>>();
             _xmlService = new XmlService(logger);
@@ -25,7 +24,6 @@ namespace CSProjOrganizer.Tests
         public void CanLoadFile()
         {
             _xmlService.GetDocument(TestFile("empty-project.csproj"));
-
         }
     }
 }
