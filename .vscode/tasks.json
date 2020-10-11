@@ -7,6 +7,7 @@
             "label": "Build Solution",
             "command": "dotnet",
             "type": "shell",
+            "dependsOn": ["Format All C#"],
             "args": [
                 "build",
                 // Ask dotnet build to generate full paths for file names.
@@ -30,6 +31,34 @@
             "group": "build",
             "presentation": {
                 "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Clean Solution",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "clean",
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Format All C#",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "format",
+                "."
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always",
+                "clear": false
             },
             "problemMatcher": "$msCompile"
         },
