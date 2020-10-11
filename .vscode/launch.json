@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/CSProjOrganizer.dll",
+            "program": "${workspaceFolder}/CSProjOrganizer/bin/Debug/netcoreapp3.1/CSProjOrganizer.dll",
             "args": ["--filename=testfile.xml"],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
