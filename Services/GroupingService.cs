@@ -38,7 +38,9 @@ namespace csproj_sorter.Services
             }
 
             this.GroupByNodeType(document);
-            this.ThenByFileType(document);
+            this.GroupByFileType(document);
+            this.RemoveEmptyItemGroups(document);
+            this.SortItemGroupItems(document);
 
             return true;
         }
@@ -86,7 +88,6 @@ namespace csproj_sorter.Services
                 {
                     // Add a label corrosponding to the itemgroup's contents
                     string label = this.GetLabel(group.Elements().First());
-                    //group.SetAttributeValue("Label", label);
 
                     var comment = new XComment(label);
                     projectRoot.Add(comment);
@@ -99,7 +100,7 @@ namespace csproj_sorter.Services
         /// <summary>
         /// Groups items within ItemGroups into new ItemGroups based on file type and any custom groupings provided in <see cref="AppSettings" />
         /// </summary>
-        public void ThenByFileType(XDocument document)
+        public void GroupByFileType(XDocument document)
         {
             var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
@@ -131,6 +132,20 @@ namespace csproj_sorter.Services
 
         public void SortItemGroupItems(XDocument document)
         {
+            var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
+
+            itemGroups.ForEach( group => this.SortItemGroup(group));
+        }
+
+        private void SortItemGroup(XElement itemGroup)
+        {
+            var children = itemGroup.Elements().ToList();
+
+            var sortedItems = itemGroup.Elements()
+                .OrderBy( item => item.Attribute("Include").Value)
+                .ToList();
+
+            itemGroup.ReplaceAll(sortedItems);
 
         }
 
@@ -177,26 +192,18 @@ namespace csproj_sorter.Services
                     .Add(element);
             });
 
-            if (newItemGroups.Count == 0)
-            {
-                return;
-            }
-            // if there's only 1 filetype in this ItemGroup, no need to make changes
-            else if (newItemGroups.Count > 1)
+            if (newItemGroups.Count > 0)
             {
                 // add the new filetype-grouped <ItemGroup>'s immediately after this group
                 _logger.LogInformation($"<ItemGroup> split into {newItemGroups.Count} filetypes");
+
+                // add back to document
                 newItemGroups
                     .ToList()
                     .ForEach(kvp => itemGroup.AddAfterSelf(kvp.Value));
 
                 // remove the original <ItemGroup>
                 itemGroup.Remove();
-            }
-            else
-            {
-                string label = newItemGroups.Keys.First();
-                itemGroup.SetAttributeValue("Label", label);
             }
         }
 
@@ -301,12 +308,19 @@ namespace csproj_sorter.Services
         {
             switch (element.Name.LocalName)
             {
+                case "Compile":
+                case "CSFile":
+                    return "Compiled C# Files";
+                case "Folder":
+                    return "Folders";
                 case "ProjectReference":
                     return "Project References";
+                case "Reference":
+                    return "Assembly References";
                 case "None":
                     return "Ignored Files";
                 case "Content":
-                    return "General"; // this group could be further broken up based on file extension
+                    return "Published Files"; // this group could be further broken up based on file extension
                 case "TypeScriptCompiles":
                     return "Typescript and Type Definitions";
                 default:
