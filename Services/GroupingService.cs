@@ -50,16 +50,15 @@ namespace csproj_sorter.Services
         /// <returns></returns>
         public void GroupByNodeType(XDocument document)
         {
-            var projectRoot = document.Element(Name("Project"));
+            var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
-            var initialGroups = projectRoot
-                .Descendants(Name("ItemGroup"))
-                .Where(group => group.Attribute("Condition") is null); // only operate on ItemGroups without "Condition" attributes
+             // only operate on ItemGroups without "Condition" attributes
+            var initialGroups = itemGroups.Where(group => group.Attribute("Condition") is null);
 
             List<XElement> itemGroupChildren = initialGroups.Elements().ToList();
 
             // group on the name of the node, like <Content />
-            var itemGroups = itemGroupChildren
+            var nodeGroupings = itemGroupChildren
                 .GroupBy(el => el.Name.LocalName)
                 .Select(group =>
                 {
@@ -77,11 +76,11 @@ namespace csproj_sorter.Services
             // remove the existing item groups
             initialGroups.Remove();
 
-            // Sort itemgroups by the name of their first child
-            itemGroups = itemGroups.OrderBy(group => group.Elements().First().Name.LocalName).ToList();
+            // Sort nodeGroupings by the name of their first child
+            nodeGroupings = nodeGroupings.OrderBy(group => group.Elements().First().Name.LocalName).ToList();
 
             // and add them in their new groupings
-            foreach (XElement group in itemGroups)
+            foreach (XElement group in nodeGroupings)
             {
                 if (group.HasElements)
                 {
@@ -102,10 +101,7 @@ namespace csproj_sorter.Services
         /// </summary>
         public void ThenByFileType(XDocument document)
         {
-            var projectRoot = document.Element(Name("Project"));
-
-            // we can assume all item groups are of the same XElement type
-            List<XElement> itemGroups = projectRoot.Descendants(Name("ItemGroup")).ToList();
+            var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
             int initialCount = itemGroups.Count;
             _logger.LogInformation($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
@@ -125,13 +121,25 @@ namespace csproj_sorter.Services
         /// </summary>
         public void RemoveEmptyItemGroups(XDocument document)
         {
-            XElement projectRoot = document.Element(Name("Project"));
-            List<XElement> itemGroups = projectRoot.Descendants(Name("ItemGroup")).ToList();
+            var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
             itemGroups
                 .Where(g => !g.HasElements)
                 .ToList()
                 .ForEach(emptyGroup => emptyGroup.Remove());
+        }
+
+        public void SortItemGroupItems(XDocument document)
+        {
+
+        }
+
+        private (XElement projectRoot, List<XElement> itemGroups) GetRootAndItemGroups(XDocument document)
+        {
+            XElement projectRoot = document.Element(Name("Project"));
+            List<XElement> itemGroups = projectRoot.Descendants(Name("ItemGroup")).ToList();
+
+            return (projectRoot, itemGroups);
         }
 
         private void OrganizeItemGroup(XElement itemGroup)
