@@ -87,7 +87,7 @@ namespace csproj_sorter.Services
                 if (group.HasElements)
                 {
                     // Add a label corrosponding to the itemgroup's contents
-                    string label = this.GetLabel(group.Elements().First());
+                    string label = this.GetItemGroupComment(group.Elements().First());
 
                     var comment = new XComment($" {label} ");
                     projectRoot.Add(comment);
@@ -304,7 +304,7 @@ namespace csproj_sorter.Services
             return new XElement(Name("ItemGroup"));
         }
 
-        private string GetLabel(XElement element)
+        private string GetItemGroupComment(XElement element)
         {
             switch (element.Name.LocalName)
             {
