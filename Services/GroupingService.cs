@@ -321,7 +321,7 @@ namespace csproj_sorter.Services
                     return "Ignored Files";
                 case "Content":
                     return "Published Files"; // this group could be further broken up based on file extension
-                case "TypeScriptCompiles":
+                case "TypeScriptCompile":
                     return "Typescript and Type Definitions";
                 default:
                     break;
