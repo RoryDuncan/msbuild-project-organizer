@@ -82,18 +82,23 @@ namespace csproj_sorter.Services
             // and add them in their new groupings
             foreach (XElement group in itemGroups)
             {
-                if (group.HasElements) 
+                if (group.HasElements)
                 {
                     // Add a label corrosponding to the itemgroup's contents
-                    var label = GetLabel(group.Elements().First());
-                    group.SetAttributeValue("Label", label);
+                    string label = this.GetLabel(group.Elements().First());
+                    //group.SetAttributeValue("Label", label);
 
+                    var comment = new XComment(label);
+                    projectRoot.Add(comment);
                     projectRoot.Add(group);
                 }
             }
 
         }
 
+        /// <summary>
+        /// Groups items within ItemGroups into new ItemGroups based on file type and any custom groupings provided in <see cref="AppSettings" />
+        /// </summary>
         public void ThenByFileType(XDocument document)
         {
             var projectRoot = document.Element(Name("Project"));
@@ -105,35 +110,48 @@ namespace csproj_sorter.Services
             _logger.LogInformation($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
 
             itemGroups
-                .Where( itemGroup => this.IsFileType(itemGroup.Elements().First()))
+                .Where( itemGroup => itemGroup.HasElements && this.IsItemWithFileTypeAttributes(itemGroup.Elements().First()))
                 .ToList()
                 .ForEach( itemGroup => {
                     Dictionary<string, XElement> newItemGroups = new Dictionary<string, XElement>();
                     string previousLabel = (string)itemGroup.Attribute("Label") ?? string.Empty;
                     // for each item of the group, check it's file type and add it to an itemgroup of similar filetypes
                     itemGroup.Elements().ToList().ForEach( element => {
-                        string fileType = GetFileExtension(element) ?? "none";
-                        string label = $"{fileType} files";
 
-                        if (!newItemGroups.ContainsKey(fileType))
+                        string filePath = this.GetFilePath(element) ?? null;
+                        string fileType = this.GetFileExtension(filePath) ?? null;
+                        string label = this.GetGroupingLabelOrDefault(fileType, filePath);
+                        string key = label ?? "__misc__";
+
+                        if (!newItemGroups.ContainsKey(key))
                         {
-                            _logger.LogInformation($"Creating <ItemGroup Label=\"{label}\">");
-                            var group = CreateItemGroup();
-                            group.SetAttributeValue(Name("Label"), label);
-                            newItemGroups.Add(fileType, CreateItemGroup());
+                            XElement value = this.CreateItemGroup();
+
+                            if (label != null)
+                            {
+                                value.SetAttributeValue("Label", label);
+                            }
+
+                            _logger.LogInformation($"Created {value.Name}");
+
+                            newItemGroups.Add(key, value);
                         }
                         else
                         {
-                            _logger.LogInformation($"Adding to <ItemGroup Label=\"{label}\">");
+                            _logger.LogInformation($"Adding to {newItemGroups.GetValueOrDefault(key).Name}");
                         }
                         
                         newItemGroups
-                            .GetValueOrDefault(fileType)
+                            .GetValueOrDefault(key)
                             .Add(element);
                     });
 
+                    if (newItemGroups.Count == 0)
+                    {
+                        return;
+                    }
                     // if there's only 1 filetype in this ItemGroup, no need to make changes
-                    if (newItemGroups.Count > 1)
+                    else if (newItemGroups.Count > 1)
                     {
                         // add the new filetype-grouped <ItemGroup>'s immediately after this group
                         _logger.LogInformation($"<ItemGroup> split into {newItemGroups.Count} filetypes");
@@ -144,6 +162,11 @@ namespace csproj_sorter.Services
                         // remove the original <ItemGroup>
                         itemGroup.Remove();
                     }
+                    else
+                    {
+                        string label = newItemGroups.Keys.First();
+                        itemGroup.SetAttributeValue("Label", label);
+                    }
                 });
 
             // log how it's changed
@@ -151,7 +174,76 @@ namespace csproj_sorter.Services
             _logger.LogInformation($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
         }
 
-        private string GetFileExtension(XElement element)
+        /// <summary>
+        /// Removes Empty ItemGroups from the XDocument
+        /// </summary>
+        public void RemoveEmptyItemGroups(XDocument document)
+        {
+            XElement projectRoot = document.Element(Name("Project"));
+            List<XElement> itemGroups = projectRoot.Descendants(Name("ItemGroup")).ToList();
+
+            itemGroups
+                .Where( g => !g.HasElements)
+                .ToList()
+                .ForEach( emptyGroup => emptyGroup.Remove());
+        }
+
+        /// <summary>
+        /// Fetches the label that should be used for an ItemGroup based on a variety of factors.
+        /// </summary>
+        /// <returns>A string or null</returns>
+        private string GetGroupingLabelOrDefault(string fileType, string filePath)
+        {
+            // when filepath is null, we won't create a label
+            if (filePath is null)
+            {
+                return null;
+            }
+
+            // check to see if this is a GLOB pattern
+            if (fileType is null && filePath != null && filePath.Contains("*"))
+            {
+                return _config.GlobPatternLabel;
+            }
+
+            if (fileType is null)
+            {
+                return _config.UnknownFileExtensionLabel;
+            }
+
+            if (TryGetGrouping(fileType, out string label))
+            {
+                return label;
+            }
+
+            return $"{fileType} files";
+        }
+
+        /// <summary>
+        /// Gets a label of a grouping for a specific filetype, if available. See <see cref="AppSettings.Groupings" />
+        /// </summary>
+        private bool TryGetGrouping(string fileType, out string label)
+        {
+            label = null;
+            if (_config.Groupings == null)
+            {
+                return false;
+            }
+
+            var match = _config.Groupings
+                .Where( kvp => kvp.Value.Contains(fileType, StringComparer.InvariantCulture));
+
+            if (match.Count() == 0)
+            {
+                return false;
+            }
+
+            label = string.Join(", ", match.First());
+
+            return true;
+        }
+
+        private string GetFilePath(XElement element)
         {
             XAttribute includeAttr = element.Attribute("Include");
             if (includeAttr is null)
@@ -159,10 +251,20 @@ namespace csproj_sorter.Services
                 return null;
             }
 
-            return Path.GetExtension(includeAttr.Value);
+            return includeAttr.Value;
         }
 
-        private bool IsFileType(XElement element)
+        private string GetFileExtension(string filePath)
+        {
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                return null;
+            }
+
+            return Path.GetExtension(filePath);
+        }
+
+        private bool IsItemWithFileTypeAttributes(XElement element)
         {
             return _config.FileTypeItems.Contains(element.Name.LocalName);
         }
@@ -194,7 +296,7 @@ namespace csproj_sorter.Services
                 case "Content":
                     return "General"; // this group could be further broken up based on file extension
                 case "TypeScriptCompiles":
-                    return "Typescript";
+                    return "Typescript and Type Definitions";
                 default:
                     break;
             }
