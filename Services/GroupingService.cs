@@ -142,7 +142,8 @@ namespace csproj_sorter.Services
             var children = itemGroup.Elements().ToList();
 
             var sortedItems = itemGroup.Elements()
-                .OrderBy( item => item.Attribute("Include").Value)
+                .OrderBy( item => this.GetFileExtension(this.GetFilePath(item)))
+                .ThenBy( item => this.GetFilePath(item))
                 .ToList();
 
             // replaceAll will remove all attributes, so we need to copy them first
