@@ -9,7 +9,7 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/bin/Debug/netcoreapp2.0/csproj_sorter.dll",
+            "program": "${workspaceFolder}/bin/Debug/netcoreapp3.1/csproj_sorter.dll",
             "args": ["--filename=testfile.xml"],
             "cwd": "${workspaceFolder}",
             "console": "internalConsole",
