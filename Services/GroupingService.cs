@@ -230,7 +230,7 @@ namespace csproj_sorter.Services
                 return _config.UnknownFileExtensionLabel;
             }
 
-            if (TryGetGrouping(fileType, out string label))
+            if (TryGetGrouping(_config.FileTypeGroupings, fileType, out string label))
             {
                 return label;
             }
@@ -241,23 +241,25 @@ namespace csproj_sorter.Services
         /// <summary>
         /// Gets a label of a grouping for a specific filetype, if available. See <see cref="AppSettings.Groupings" />
         /// </summary>
-        private bool TryGetGrouping(string fileType, out string label)
+        private bool TryGetGrouping(object configGroup, string value, out string label)
         {
             label = null;
-            if (_config.Groupings == null)
+            if (configGroup == null)
             {
                 return false;
             }
 
-            var match = _config.Groupings
-                .Where(kvp => kvp.Value.Contains(fileType, StringComparer.InvariantCultureIgnoreCase));
+            var grouping = configGroup as Dictionary<string, IEnumerable<string>>;
+
+            var match = grouping
+                .Where(kvp => kvp.Value.Contains(value, StringComparer.InvariantCultureIgnoreCase));
 
             if (match.Count() == 0)
             {
                 return false;
             }
 
-            label = string.Join(", ", match.First());
+            label = string.Join(", ", match.First().Key);
 
             return true;
         }
@@ -306,25 +308,10 @@ namespace csproj_sorter.Services
 
         private string GetItemGroupComment(XElement element)
         {
-            switch (element.Name.LocalName)
+            string itemGroupType = element.Name.LocalName;
+            if (TryGetGrouping(_config.ItemGroupGroupings, itemGroupType, out string label))
             {
-                case "Compile":
-                case "CSFile":
-                    return "Compiled C# Files";
-                case "Folder":
-                    return "Folders";
-                case "ProjectReference":
-                    return "Project References";
-                case "Reference":
-                    return "Assembly References";
-                case "None":
-                    return "Ignored Files";
-                case "Content":
-                    return "Published Files"; // this group could be further broken up based on file extension
-                case "TypeScriptCompile":
-                    return "Typescript and Type Definitions";
-                default:
-                    break;
+                return label;
             }
 
             return $"{element.Name.LocalName} Includes";

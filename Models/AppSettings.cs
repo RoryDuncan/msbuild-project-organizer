@@ -36,8 +36,13 @@ namespace csproj_sorter.Models
         /// Items that can be grouped together into a single ItemGroup.
         /// Useful for grouping different images types together and such
         /// </summary>
-        /// 
-        public Dictionary<string, IEnumerable<string>> Groupings { get; set; }
+        public Dictionary<string, IEnumerable<string>> FileTypeGroupings { get; set; }
+
+        /// <summary>
+        /// Labels for ItemGroups, displaying as comments before that group
+        /// </summary>
+        public Dictionary<string, IEnumerable<string>> ItemGroupGroupings { get; set; }
+
 
         #endregion
     }

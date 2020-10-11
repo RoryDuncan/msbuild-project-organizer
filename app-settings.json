@@ -4,8 +4,17 @@
     "DefaultConfigFileName": "csprojsort.config.json",
     "Description": "Sorts a .csproj file",
     "FileTypeItems": ["Content", "Compile", "TypeScriptCompile", "EmbeddedResource"],
-    "Groupings": {
+    "FileTypeGroupings": {
       "Images": [".png", ".jpg", ".jpeg", ".gif", ".tiff", ".ico", ".icon", "webp", ".svg", ".bmp"]
+    },
+    "ItemGroupGroupings": {
+      "Published Files": ["Content"],
+      "Typescript and Type Definitions": ["TypeScriptCompile"],
+      "Ignored Files": ["None"],
+      "Assembly References": ["Reference"],
+      "Project References": ["ProjectReference"],
+      "Folders": ["Folder"],
+      "Compiled C# Files": ["Compile", "CSFile"]
     }
   }
 }
