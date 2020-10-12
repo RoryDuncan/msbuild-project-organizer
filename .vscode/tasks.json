@@ -48,6 +48,24 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "Dogfood",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "CSProjOrganizer.dll",
+                "--filename",
+                "${workspaceFolder}/CSProjOrganizer/CSProjOrganizer.csproj"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/CSProjOrganizer/bin/Debug/netcoreapp3.1"
+            },
+            "group": "none",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "Clean Solution",
             "command": "dotnet",
             "type": "shell",
