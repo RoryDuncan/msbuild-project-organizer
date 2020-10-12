@@ -7,15 +7,19 @@ namespace CSProjOrganizer.Models
         /// <summary>
         /// Sets header title in console window
         /// </summary>
-        public string ConsoleTitle { get; set; }
+        public static readonly string ConsoleTitle = "CSProjOrganizer";
+
         /// <summary>
         /// The default name of the file configuration to look for when running the application
         /// </summary>
-        public string DefaultConfigFileName { get; set; }
+        public static readonly string DefaultConfigFileName = "csproj.config.json";
 
-        public string Description { get; set; }
+        public static readonly string Description = "Sorts and organizes a .csproj file";
+
 
         #region sort / grouping configuration
+
+
         /// <summary>
         /// The label given to items that don't have a file extension and aren't glob patterns
         /// </summary>

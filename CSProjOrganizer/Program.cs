@@ -29,7 +29,8 @@ namespace CSProjOrganizer
                 new Option<string>("--filename", "The csproj file that should be sorted")
             };
 
-            rootCommand.Description = appSettings.Value.Description;
+            System.Console.Title = AppSettings.ConsoleTitle;
+            rootCommand.Description = AppSettings.Description;
 
             // Note that the parameters of the handler method are matched according to the names of the options
             rootCommand.Handler = CommandHandler.Create<string>((string fileName) =>
@@ -38,11 +39,6 @@ namespace CSProjOrganizer
             });
 
             return rootCommand.InvokeAsync(args).Result;
-        }
-
-        private static void ConfigureConsole(AppSettings settings)
-        {
-            System.Console.Title = settings.ConsoleTitle;
         }
     }
 }
