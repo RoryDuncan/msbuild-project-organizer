@@ -65,9 +65,29 @@
             "label": "Run Tests",
             "command": "dotnet",
             "type": "shell",
-            "dependsOn": ["build"],
+            "dependsOn": ["Build Solution"],
             "args": [
                 "test"
+            ],
+            "group": "test",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Run Sample File",
+            "command": "dotnet",
+            "type": "shell",
+            "dependsOn": ["Build Solution"],
+            "options": {
+                "cwd": "${workspaceFolder}/CSProjOrganizer"
+            },
+            "args": [
+                "run",
+                "--",
+                "--filename",
+                "testfile.xml"
             ],
             "group": "test",
             "presentation": {

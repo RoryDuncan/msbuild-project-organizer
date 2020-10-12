@@ -10,7 +10,6 @@ namespace CSProjOrganizer
     {
         private readonly ILogger<App> _logger;
         private readonly AppSettings _config;
-        private SortSettings Settings { get; set; }
         private readonly IXmlService _xmlService;
         private readonly IGroupingService _groupingService;
 
@@ -43,8 +42,10 @@ namespace CSProjOrganizer
             // load the document
             XDocument document = _xmlService.GetDocument(input);
 
+
+            var sortOptions = new SortOptions();
             // sort the items
-            bool wasModified = _groupingService.Group(document);
+            bool wasModified = _groupingService.Group(document, sortOptions);
 
             if (wasModified)
             {

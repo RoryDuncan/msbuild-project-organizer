@@ -1,0 +1,67 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Xml.Linq;
+using CSProjOrganizer.Interfaces;
+using CSProjOrganizer.Models;
+using CSProjOrganizer.Services;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Moq;
+using Xunit;
+
+namespace CSProjOrganizer.Tests
+{
+    public class GroupingServiceTests
+    {
+        private readonly IGroupingService _groupingService;
+
+        public GroupingServiceTests()
+        {
+            var logger = Mock.Of<ILogger<GroupingService>>();
+            var appSettings = new AppSettings();
+
+            _groupingService = new GroupingService(logger, Options.Create(appSettings));
+        }
+
+        [Fact]
+        public void HandlesEmptyProject()
+        {
+            var options = SortOptions.CreateEmpty();
+            options.GroupByNodeType = true;
+
+            var document = new XDocument(new XElement("Project"));
+
+            bool result =_groupingService.Group(document, options);
+        }
+
+
+        [Fact]
+        public void GroupByNodeType()
+        {
+            var options = SortOptions.CreateEmpty();
+            options.GroupByNodeType = true;
+
+            var document = new XDocument(
+                new XElement("Project",
+                    new XElement("ItemGroup",
+                        new XElement("Compile", new XAttribute("Include", "Alpha.cs")),
+                        new XElement("Content", new XAttribute("Include", "Beta.html")),
+                        new XElement("TypeScriptCompile", new XAttribute("Include", "Charlie.d.ts"))
+                    )
+                )
+            );
+
+            var wasModified =_groupingService.Group(document, options);
+
+            Assert.True(wasModified, "The document wasnt modified");
+
+            var itemGroups = document.Descendants("ItemGroup").ToList();
+
+            // these could be more granular if some fixtures were setup
+            Assert.True(itemGroups.Count() == 3, "Each Item was not placed into a separate ItemGroup");
+            Assert.True(itemGroups.TrueForAll( itemGroup => itemGroup.Elements().Count() == 1), "Each ItemGroup has one child");
+        }
+    }
+}

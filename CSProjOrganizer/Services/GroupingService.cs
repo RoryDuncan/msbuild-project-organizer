@@ -29,7 +29,7 @@ namespace CSProjOrganizer.Services
         /// <summary>
         /// Groups and sorts the XDocument's ItemGroup. Returns a bool indicating if the document was modified or not.
         /// </summary>
-        public bool Group(XDocument document)
+        public bool Group(XDocument document, SortOptions options)
         {
             if (!HasProjectRoot(document))
             {
@@ -37,10 +37,25 @@ namespace CSProjOrganizer.Services
                 return false;
             }
 
-            this.GroupByNodeType(document);
-            this.GroupByFileType(document);
-            this.RemoveEmptyItemGroups(document);
-            this.SortItemGroupItems(document);
+            if (options.GroupByNodeType)
+            {
+                this.GroupByNodeType(document);
+            }
+
+            if (options.GroupByFileType)
+            {
+                this.GroupByFileType(document);
+            }
+
+            if (options.RemoveEmptyItemGroups)
+            {
+                this.RemoveEmptyItemGroups(document);
+            }
+
+            if (options.SortItemsWithinItemGroups)
+            {
+                this.SortItemGroupItems(document);
+            }
 
             return true;
         }
@@ -113,7 +128,7 @@ namespace CSProjOrganizer.Services
                 .ForEach(itemGroup => OrganizeItemGroup(itemGroup));
 
             // log how it's changed
-            int resultingCount = projectRoot.Descendants(Name("ItemGroup")).ToList().Count;
+            int resultingCount = projectRoot.Descendants("ItemGroup").ToList().Count;
             _logger.LogInformation($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
         }
 
@@ -159,8 +174,8 @@ namespace CSProjOrganizer.Services
 
         private (XElement projectRoot, List<XElement> itemGroups) GetRootAndItemGroups(XDocument document)
         {
-            XElement projectRoot = document.Element(Name("Project"));
-            List<XElement> itemGroups = projectRoot.Descendants(Name("ItemGroup")).ToList();
+            XElement projectRoot = document.Element("Project");
+            List<XElement> itemGroups = projectRoot.Descendants("ItemGroup").ToList();
 
             return (projectRoot, itemGroups);
         }
@@ -291,6 +306,7 @@ namespace CSProjOrganizer.Services
             return _config.FileTypeItems.Contains(element.Name.LocalName);
         }
 
+        // in case we need items specifically from the MSBuild namespace
         private XName Name(string name)
         {
             return XName.Get(name, xmlns);
@@ -298,13 +314,13 @@ namespace CSProjOrganizer.Services
 
         private bool HasProjectRoot(XDocument document)
         {
-            XElement projectRoot = document.Element(Name("Project"));
+            XElement projectRoot = document.Element("Project");
             return !(projectRoot is null);
         }
 
         private XElement CreateItemGroup()
         {
-            return new XElement(Name("ItemGroup"));
+            return new XElement("ItemGroup");
         }
 
         private string GetItemGroupComment(XElement element)

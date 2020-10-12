@@ -8,10 +8,10 @@
             "name": ".NET Core Launch (console)",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "Build Solution",
             "program": "${workspaceFolder}/CSProjOrganizer/bin/Debug/netcoreapp3.1/CSProjOrganizer.dll",
             "args": ["--filename=testfile.xml"],
-            "cwd": "${workspaceFolder}",
+            "cwd": "${workspaceFolder}/CSProjOrganizer",
             "console": "internalConsole",
             "stopAtEntry": false
         },
