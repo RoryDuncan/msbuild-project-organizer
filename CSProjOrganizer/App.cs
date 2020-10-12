@@ -43,7 +43,14 @@ namespace CSProjOrganizer
             XDocument document = _xmlService.GetDocument(input);
 
 
-            var sortOptions = new SortOptions();
+            var sortOptions = new SortOptions()
+            {
+                GroupByNodeType = true,
+                GroupByFileType = true,
+                SortItemsWithinItemGroups = true,
+                RemoveEmptyItemGroups = true,
+            };
+
             // sort the items
             bool wasModified = _groupingService.Group(document, sortOptions);
 

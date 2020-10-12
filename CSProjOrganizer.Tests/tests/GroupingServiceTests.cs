@@ -28,8 +28,11 @@ namespace CSProjOrganizer.Tests
         [Fact]
         public void HandlesEmptyProject()
         {
-            var options = SortOptions.CreateEmpty();
-            options.GroupByNodeType = true;
+            var options = new SortOptions()
+            {
+                GroupByNodeType = true
+            };
+
 
             var document = new XDocument(new XElement("Project"));
 
@@ -40,8 +43,11 @@ namespace CSProjOrganizer.Tests
         [Fact]
         public void GroupByNodeType()
         {
-            var options = SortOptions.CreateEmpty();
-            options.GroupByNodeType = true;
+            var options = new SortOptions()
+            {
+                GroupByNodeType = true,
+            };
+
 
             var document = new XDocument(
                 new XElement("Project",
@@ -65,10 +71,42 @@ namespace CSProjOrganizer.Tests
         }
 
         [Fact]
+        public void GroupByFileType()
+        {
+            var options = new SortOptions()
+            {
+                GroupByFileType = true,
+            };
+
+            var document = new XDocument(
+                new XElement("Project",
+                    new XElement("ItemGroup",
+                        new XElement("Content", new XAttribute("Include", "Alpha.cshtml")),
+                        new XElement("Content", new XAttribute("Include", "Beta.html")),
+                        new XElement("Content", new XAttribute("Include", "Charlie.js"))
+                    )
+                )
+            );
+
+            var wasModified =_groupingService.Group(document, options);
+
+            Assert.True(wasModified, "The document wasnt modified");
+
+            var itemGroups = document.Descendants("ItemGroup").ToList();
+
+            // these could be more granular if some fixtures were setup
+            Assert.True(itemGroups.Count() == 3, "Each Item was not placed into a separate ItemGroup");
+            Assert.True(itemGroups.TrueForAll( itemGroup => itemGroup.Elements().Count() == 1), "Each ItemGroup has one child");
+        }
+
+        [Fact]
         public void SortItemsWithinItemGroups()
         {
-            var options = SortOptions.CreateEmpty();
-            options.SortItemsWithinItemGroups = true;
+            var options = new SortOptions()
+            {
+                SortItemsWithinItemGroups = true,
+            };
+
 
             List<string> orderedFiles = new List<string>()
             {

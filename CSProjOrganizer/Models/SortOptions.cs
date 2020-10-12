@@ -2,10 +2,10 @@ namespace CSProjOrganizer.Models
 {
     public class SortOptions
     {
-        public bool GroupByNodeType { get; set; } = true;
-        public bool GroupByFileType { get; set; } = true;
-        public bool RemoveEmptyItemGroups { get; set; } = true;
-        public bool SortItemsWithinItemGroups { get; set; } = true;
+        public bool GroupByNodeType { get; set; }
+        public bool GroupByFileType { get; set; }
+        public bool RemoveEmptyItemGroups { get; set; }
+        public bool SortItemsWithinItemGroups { get; set; }
 
         public static SortOptions CreateEmpty()
         {

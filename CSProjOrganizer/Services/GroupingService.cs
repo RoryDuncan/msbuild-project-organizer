@@ -303,7 +303,12 @@ namespace CSProjOrganizer.Services
 
         private bool IsItemWithFileTypeAttributes(XElement element)
         {
-            return _config.FileTypeItems.Contains(element.Name.LocalName);
+            if (_config.FileTypeItems.Count() > 0)
+            {
+                return _config.FileTypeItems.Contains(element.Name.LocalName);
+            }
+
+            return element.Attribute("Include") != null;
         }
 
         // in case we need items specifically from the MSBuild namespace

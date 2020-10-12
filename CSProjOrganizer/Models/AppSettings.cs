@@ -31,7 +31,7 @@ namespace CSProjOrganizer.Models
         /// Items that represent files. AKA Items that are likely to have an "Include" attribute
         /// </summary>
         /// <value></value>
-        public IEnumerable<string> FileTypeItems { get; set; }
+        public IEnumerable<string> FileTypeItems { get; set; } = new List<string>();
         /// <summary>
         /// Items that can be grouped together into a single ItemGroup.
         /// Useful for grouping different images types together and such
