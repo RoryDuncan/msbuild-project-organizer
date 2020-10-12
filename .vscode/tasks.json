@@ -34,6 +34,20 @@
             "problemMatcher": "$msCompile"
         },
         {
+            "label": "Publish",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "publish",
+                "CSProjOrganizer/CSProjOrganizer.csproj"
+            ],
+            "group": "none",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
             "label": "Clean Solution",
             "command": "dotnet",
             "type": "shell",
