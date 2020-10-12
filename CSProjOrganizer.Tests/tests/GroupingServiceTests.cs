@@ -63,5 +63,46 @@ namespace CSProjOrganizer.Tests
             Assert.True(itemGroups.Count() == 3, "Each Item was not placed into a separate ItemGroup");
             Assert.True(itemGroups.TrueForAll( itemGroup => itemGroup.Elements().Count() == 1), "Each ItemGroup has one child");
         }
+
+        [Fact]
+        public void SortItemsWithinItemGroups()
+        {
+            var options = SortOptions.CreateEmpty();
+            options.SortItemsWithinItemGroups = true;
+
+            List<string> orderedFiles = new List<string>()
+            {
+                "Alpha.cs",
+                "Beta.cs",
+                "Charlie.cs",
+                "Zeta.cs",
+            };
+
+            var document = new XDocument(
+                new XElement("Project",
+                    new XElement("ItemGroup",
+                        new XElement("Compile", new XAttribute("Include", orderedFiles.ElementAt(1))),
+                        new XElement("Compile", new XAttribute("Include", orderedFiles.ElementAt(0))),
+                        new XElement("Compile", new XAttribute("Include", orderedFiles.ElementAt(3))),
+                        new XElement("Compile", new XAttribute("Include", orderedFiles.ElementAt(2)))
+                    )
+                )
+            );
+
+            var wasModified =_groupingService.Group(document, options);
+
+            Assert.True(wasModified, "The document wasnt modified");
+
+            var itemGroups = document.Descendants("ItemGroup").ToList();
+            var itemGroup = itemGroups.First();
+
+            Assert.True(itemGroups.Count() == 1, "Multiple ItemGroups were created");
+            var items = itemGroup.Elements();
+
+            Assert.True(items.ElementAt(0).Attribute("Include").Value == orderedFiles.ElementAt(0), "ItemGroup wasn't sorted");
+            Assert.True(items.ElementAt(1).Attribute("Include").Value == orderedFiles.ElementAt(1), "ItemGroup wasn't sorted");
+            Assert.True(items.ElementAt(2).Attribute("Include").Value == orderedFiles.ElementAt(2), "ItemGroup wasn't sorted");
+            Assert.True(items.ElementAt(3).Attribute("Include").Value == orderedFiles.ElementAt(3), "ItemGroup wasn't sorted");
+        }
     }
 }
