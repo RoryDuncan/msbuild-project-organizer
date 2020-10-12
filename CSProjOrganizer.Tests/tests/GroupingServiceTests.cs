@@ -100,6 +100,36 @@ namespace CSProjOrganizer.Tests
         }
 
         [Fact]
+        public void RemoveEmptyItemGroups()
+        {
+            var options = new SortOptions()
+            {
+                RemoveEmptyItemGroups = true,
+            };
+
+            var document = new XDocument(
+                new XElement("Project",
+                    new XElement("ItemGroup"),
+                    new XElement("ItemGroup",
+                        new XElement("Content", new XAttribute("Include", "Alpha.cshtml"))
+                    ),
+                    new XElement("ItemGroup")
+                )
+            );
+
+            var wasModified =_groupingService.Group(document, options);
+
+            Assert.True(wasModified, "The document wasnt modified");
+
+            var itemGroups = document.Descendants("ItemGroup").ToList();
+
+            // these could be more granular if some fixtures were setup
+            Assert.True(itemGroups.Count() == 1, "Empty ItemGroups were not removed");
+            Assert.True(itemGroups.TrueForAll(itemGroup => itemGroup.Elements().Count() > 0), "Empty ItemGroup were not removed");
+            Assert.True(itemGroups.First().Elements().First().Name.LocalName == "Content", "Existing Item was removed");
+        }
+
+        [Fact]
         public void SortItemsWithinItemGroups()
         {
             var options = new SortOptions()
