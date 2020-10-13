@@ -21,7 +21,7 @@ Has some configuration. See [Sort Options](#sort-options).
 ## Usage
 
 ```
-CSProjOrganizer.exe --filename=project.csproj
+CSProjOrganizer.exe --input=project.csproj
 ```
 
 _Todo: Add more commandline flags for controlling SortOptions_.

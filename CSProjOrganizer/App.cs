@@ -72,7 +72,7 @@ namespace CSProjOrganizer
             _logger.LogInformation($"params: {input}");
             if (string.IsNullOrWhiteSpace(input))
             {
-                _logger.LogError($"A --filename was not provided. Run this application with the name of a .csproj file as the --filename arg.");
+                _logger.LogError($"A --input was not provided. Run this application with the name of a .csproj file as the --input arg.");
                 return false;
             }
 

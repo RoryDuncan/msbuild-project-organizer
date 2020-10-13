@@ -53,7 +53,7 @@
             "type": "shell",
             "args": [
                 "CSProjOrganizer.dll",
-                "--filename",
+                "--input",
                 "${workspaceFolder}/CSProjOrganizer/CSProjOrganizer.csproj"
             ],
             "options": {
@@ -118,7 +118,7 @@
             "args": [
                 "run",
                 "--",
-                "--filename",
+                "--input",
                 "testfile.xml"
             ],
             "group": "test",

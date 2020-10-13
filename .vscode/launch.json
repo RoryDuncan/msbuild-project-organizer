@@ -11,7 +11,7 @@
             "preLaunchTask": "Build Solution",
             "program": "${workspaceFolder}/CSProjOrganizer/bin/Debug/netcoreapp3.1/CSProjOrganizer.dll",
             "args": [
-                "--filename=testfile.xml",
+                "--input=testfile.xml",
                 "--output=testfile.sorted.xml",
                 "--config=testfile-config.json"
             ],

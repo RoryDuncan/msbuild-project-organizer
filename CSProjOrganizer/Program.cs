@@ -20,7 +20,7 @@ namespace CSProjOrganizer
             // Create a root command with some options
             var rootCommand = new RootCommand
             {
-                new Option<string>("--filename", "The csproj file that should be sorted"),
+                new Option<string>("--input", "The csproj file that should be sorted"),
                 new Option<string>("--output", "The output file path, if desired to be separate from the input"),
                 new Option<string>("--config", "The path to a configuration file"),
             };
