@@ -36,3 +36,50 @@ Run `dotnet test`.
 
 ## Useful Links
 - https://docs.microsoft.com/en-us/visualstudio/msbuild/common-msbuild-project-items?view=vs-2019
+
+
+# Example Changes
+
+### Before
+``` xml
+<Project>
+  <ItemGroup>
+    <Content Include="jquery.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views/Index.cshtml" />
+    <Content Include="croppie.js" />
+    <Compile Include="DashboardController.cs" />
+    <Content Include="Views/Dashboard/Index.cshtml" />
+    <Compile Include="Bundling.cs" />
+    <Content Include="Views/Home.cshtml" />
+    <Content Include="jquery.validator.js" />
+    <Compile Include="HomeController.cs" />
+  </ItemGroup>
+</Project>
+```
+
+### After
+
+``` xml
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Compiled C# Files -->
+  <ItemGroup Label=".cs files">
+    <Compile Include="Bundling.cs" />
+    <Compile Include="DashboardController.cs" />
+    <Compile Include="HomeController.cs" />
+  </ItemGroup>
+  <!-- Published Files -->
+  <ItemGroup Label=".cshtml files">
+    <Content Include="Views/Dashboard/Index.cshtml" />
+    <Content Include="Views/Home.cshtml" />
+    <Content Include="Views/Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup Label=".js files">
+    <Content Include="croppie.js" />
+    <Content Include="jquery.js" />
+    <Content Include="jquery.validator.js" />
+  </ItemGroup>
+</Project>
+```
