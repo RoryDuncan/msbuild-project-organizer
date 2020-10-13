@@ -36,7 +36,7 @@ namespace CSProjOrganizer.Tests
 
             var document = new XDocument(new XElement("Project"));
 
-            bool result =_groupingService.Group(document, options);
+            bool result = _groupingService.Group(document, options);
         }
 
 
@@ -59,7 +59,7 @@ namespace CSProjOrganizer.Tests
                 )
             );
 
-            var wasModified =_groupingService.Group(document, options);
+            var wasModified = _groupingService.Group(document, options);
 
             Assert.True(wasModified, "The document wasnt modified");
 
@@ -67,7 +67,7 @@ namespace CSProjOrganizer.Tests
 
             // these could be more granular if some fixtures were setup
             Assert.True(itemGroups.Count() == 3, "Each Item was not placed into a separate ItemGroup");
-            Assert.True(itemGroups.TrueForAll( itemGroup => itemGroup.Elements().Count() == 1), "Each ItemGroup has one child");
+            Assert.True(itemGroups.TrueForAll(itemGroup => itemGroup.Elements().Count() == 1), "Each ItemGroup has one child");
         }
 
         [Fact]
@@ -88,7 +88,7 @@ namespace CSProjOrganizer.Tests
                 )
             );
 
-            var wasModified =_groupingService.Group(document, options);
+            var wasModified = _groupingService.Group(document, options);
 
             Assert.True(wasModified, "The document wasnt modified");
 
@@ -96,7 +96,7 @@ namespace CSProjOrganizer.Tests
 
             // these could be more granular if some fixtures were setup
             Assert.True(itemGroups.Count() == 3, "Each Item was not placed into a separate ItemGroup");
-            Assert.True(itemGroups.TrueForAll( itemGroup => itemGroup.Elements().Count() == 1), "Each ItemGroup has one child");
+            Assert.True(itemGroups.TrueForAll(itemGroup => itemGroup.Elements().Count() == 1), "Each ItemGroup has one child");
         }
 
         [Fact]
@@ -117,7 +117,7 @@ namespace CSProjOrganizer.Tests
                 )
             );
 
-            var wasModified =_groupingService.Group(document, options);
+            var wasModified = _groupingService.Group(document, options);
 
             Assert.True(wasModified, "The document wasnt modified");
 
@@ -157,7 +157,7 @@ namespace CSProjOrganizer.Tests
                 )
             );
 
-            var wasModified =_groupingService.Group(document, options);
+            var wasModified = _groupingService.Group(document, options);
 
             Assert.True(wasModified, "The document wasnt modified");
 

@@ -29,7 +29,8 @@ namespace CSProjOrganizer
             rootCommand.Description = AppSettings.Description;
 
             // Note that the parameters of the handler method are matched according to the names of the options
-            rootCommand.Handler = CommandHandler.Create<string, string, string>((string input, string output, string config) => {
+            rootCommand.Handler = CommandHandler.Create<string, string, string>((string input, string output, string config) =>
+            {
                 Program.AppStart(input, output, config);
             });
 
