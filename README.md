@@ -21,10 +21,8 @@ Has some configuration. See [Sort Options](#sort-options).
 ## Usage
 
 ```
-CSProjOrganizer.exe --input=project.csproj
+dotnet CSProjOrganizer.dll --input=project.csproj
 ```
-
-_Todo: Add more commandline flags for controlling SortOptions_.
 
 # Development
 
@@ -35,11 +33,6 @@ For tidyness, [dotnet format](https://github.com/dotnet/format) is performed bef
 
 ### Run Tests
 Run `dotnet test`.
-
-## TODO:
-- Separate Configuration from AppSettings
-- More Unit Tests
-- Action Suggestionss
 
 ## Useful Links
 - https://docs.microsoft.com/en-us/visualstudio/msbuild/common-msbuild-project-items?view=vs-2019
