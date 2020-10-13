@@ -44,7 +44,7 @@ namespace CSProjOrganizer
             // create service provider
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var appSettings = serviceProvider.GetService<IOptions<AppSettings>>();
-            serviceProvider.GetService<App>().Run(filename);
+            serviceProvider.GetService<App>().Run(filename, output);
         }
     }
 }

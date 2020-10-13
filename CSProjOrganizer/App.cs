@@ -24,11 +24,16 @@ namespace CSProjOrganizer
             _groupingService = groupingService;
         }
 
-        public void Run(string input)
+        public void Run(string input, string output)
         {
             if (!IsValid(input))
             {
                 return;
+            }
+
+            if (string.IsNullOrWhiteSpace(output))
+            {
+                output = input;
             }
 
             _logger.LogInformation($"Sorting '{input}'...");
@@ -56,7 +61,7 @@ namespace CSProjOrganizer
             if (wasModified)
             {
                 _logger.LogInformation("Sort complete.");
-                _xmlService.SaveDocument($"{input}.sorted", document);
+                _xmlService.SaveDocument(output, document);
             }
 
             _logger.LogInformation("Done.");
