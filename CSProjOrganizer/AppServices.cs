@@ -10,7 +10,7 @@ namespace CSProjOrganizer
 {
     public class AppServices
     {
-        public static IServiceCollection Configure()
+        public static IServiceCollection Configure(string configFile = null)
         {
             IServiceCollection serviceCollection = new ServiceCollection();
 
@@ -19,15 +19,15 @@ namespace CSProjOrganizer
                 .AddConsole()
                 .AddDebug());
             serviceCollection.AddLogging();
+            serviceCollection.AddOptions();
 
             // build configuration
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("app-settings.json", false)
+                .AddJsonFile(configFile ?? AppSettings.DefaultConfigFileName, false)
                 .Build();
 
-            serviceCollection.AddOptions();
-            serviceCollection.Configure<AppSettings>(configuration.GetSection("Configuration"));
+            serviceCollection.Configure<SortConfiguration>(configuration.GetSection("Configuration"));
 
             AppServices.AddServices(serviceCollection);
 

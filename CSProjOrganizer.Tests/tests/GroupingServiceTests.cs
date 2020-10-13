@@ -20,9 +20,9 @@ namespace CSProjOrganizer.Tests
         public GroupingServiceTests()
         {
             var logger = Mock.Of<ILogger<GroupingService>>();
-            var appSettings = new AppSettings();
+            var config = SortConfiguration.CreateWithDefaults();
 
-            _groupingService = new GroupingService(logger, Options.Create(appSettings));
+            _groupingService = new GroupingService(logger, Options.Create(config));
         }
 
         [Fact]

@@ -9,25 +9,19 @@ namespace CSProjOrganizer
     public class App
     {
         private readonly ILogger<App> _logger;
-        private readonly AppSettings _config;
+        private readonly SortConfiguration _config;
         private readonly IXmlService _xmlService;
         private readonly IGroupingService _groupingService;
 
-        public App(IOptions<AppSettings> config,
+        public App(IOptions<SortConfiguration> config,
                    ILogger<App> logger,
                    IXmlService xmlService,
                    IGroupingService groupingService)
         {
             _logger = logger;
-            _config = config.Value;
+            _config = config.Value ?? SortConfiguration.CreateWithDefaults();
             _xmlService = xmlService;
             _groupingService = groupingService;
-        }
-
-        public void ConfigureSettings(string configFileName, string directory)
-        {
-            string filename = configFileName ?? _config.DefaultConfigFileName;
-            // todo: read json as SortSettings class
         }
 
         public void Run(string input)
@@ -43,7 +37,12 @@ namespace CSProjOrganizer
             XDocument document = _xmlService.GetDocument(input);
 
 
-            var sortOptions = new SortOptions()
+            if (_config.SortOptions is null)
+            {
+                _logger.LogInformation("Using default sort options");
+            }
+
+            var sortOptions = _config.SortOptions ?? new SortOptions()
             {
                 GroupByNodeType = true,
                 GroupByFileType = true,

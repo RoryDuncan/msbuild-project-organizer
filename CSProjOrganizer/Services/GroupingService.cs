@@ -17,10 +17,10 @@ namespace CSProjOrganizer.Services
         private readonly string xmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
 
         private readonly ILogger<GroupingService> _logger;
-        private readonly AppSettings _config;
+        private readonly SortConfiguration _config;
 
         public GroupingService(ILogger<GroupingService> logger,
-            IOptions<AppSettings> config)
+            IOptions<SortConfiguration> config)
         {
             _logger = logger;
             _config = config.Value;
