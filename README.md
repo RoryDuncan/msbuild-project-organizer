@@ -26,8 +26,6 @@ dotnet CSProjOrganizer.dll --input=project.csproj
 
 # Development
 
-For tidyness, [dotnet format](https://github.com/dotnet/format) is performed before all builds.
-1. Install [dotnet format](https://github.com/dotnet/format#how-to-install): `dotnet tool install -g dotnet-format
 `
 2. `dotnet build`
 
