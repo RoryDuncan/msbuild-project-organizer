@@ -1,4 +1,5 @@
 bin/
 obj/
 testfile.xml
-testfile.xml.sorted
+testfile.sorted.xml
+testfile-config.json
