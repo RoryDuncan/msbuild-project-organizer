@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <PackAsTool>true</PackAsTool>
+    <ToolCommandName>organize-csproj</ToolCommandName>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>CSProjOrganizer</AssemblyName>
     <OutputType>Exe</OutputType>
@@ -25,15 +27,5 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="csproj.config.defaults.json" CopyToOutputDirectory="Always" />
-    <Content Include=".vscode\tasks.json" />
-    <Content Include="Program.cs" />
-    <Content Include="App.cs" />
-    <Content Include="Services\GroupingService.cs" />
-    <Content Include="Models\AppSettings.cs" />
-    <Content Include="Models\SortSettings.cs" />
-    <Content Include="interfaces\IXmlService.cs" />
-    <Content Include="interfaces\IGroupingService.cs" />
-    <Content Include="Services\XmlService.cs" />
-    <Content Include="AppServices.cs" />
   </ItemGroup>
 </Project>
