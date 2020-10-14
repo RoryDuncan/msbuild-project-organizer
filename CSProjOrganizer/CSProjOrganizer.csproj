@@ -1,8 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <PackageId>organize-csproj</PackageId>
+    <Title>CSProj Organizer</Title>
+    <Version>1.0.0</Version>
+    <Authors>RoryDuncan</Authors>
+    <PackageDescription>A tool for organizing csproj files</PackageDescription>
+    <DevelopmentDependency>true</DevelopmentDependency>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>organize-csproj</ToolCommandName>
+    <PackageOutputPath>./package</PackageOutputPath>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>CSProjOrganizer</AssemblyName>
     <OutputType>Exe</OutputType>

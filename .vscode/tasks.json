@@ -9,10 +9,42 @@
             "type": "shell",
             "args": [
                 "build",
+                "--nologo",
                 // Ask dotnet build to generate full paths for file names.
                 "/property:GenerateFullPaths=true",
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
                 "/consoleloggerparameters:NoSummary"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Package",
+            "command": "dotnet",
+            "type": "shell",
+            "dependsOn": ["Build Solution", "Publish"],
+            "dependsOrder": "sequence",
+            "args": [
+                "pack",
+                "--no-build",
+                "--nologo"
+            ],
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Publish",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "publish",
+                "--nologo"
             ],
             "group": "build",
             "presentation": {
