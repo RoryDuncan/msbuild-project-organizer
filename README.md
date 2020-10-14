@@ -39,6 +39,7 @@ Run `dotnet test`.
 # Example Changes
 
 ### Before
+_Some messy XML_
 ``` xml
 <Project>
   <ItemGroup>
