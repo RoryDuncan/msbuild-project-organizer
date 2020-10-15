@@ -10,37 +10,37 @@ Then, use it via:
 dotnet organize-csproj --input=your-project.csproj
 ```
 
-## Parameters
-
-
+## CLI Arguments
 
 ```
 --input
 ```
-> **Description:** The path to a `.csproj` file.
+**Description:** The path to a `.csproj` file.
 
-> **Default:** None
+**Default:** None
 
-> **Required:** Yes
+**Required:** Yes
 
 ```
 --output
 ```
-> **Description:** The filename to save the input`.csproj` after it has been sorted.
+**Description:** The filename to save the input`.csproj` after it has been sorted.
 
-> **Default:** The value of `--input` (overwrites existing file)
+**Default:** The value of `--input` (overwrites existing file)
 
-> **Required:** No
+**Required:** No
 
 
 ```
 --config
 ```
-> **Description:** The path to a configuration json file
+**Description:** The path to a configuration json file
 
-> **Default:** None
+**Default:** None
 
-> **Required:** No
+**Required:** No
+
+---
 
 ### Example
 ```
