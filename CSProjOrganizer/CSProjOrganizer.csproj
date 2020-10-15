@@ -1,15 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <PackageId>organize-csproj</PackageId>
+    <PackageId>CSProj.Organizer</PackageId>
     <Title>CSProj Organizer</Title>
     <Version>1.0.0</Version>
     <Authors>RoryDuncan</Authors>
-    <PackageDescription>A tool for organizing csproj files</PackageDescription>
+    <PackageDescription>A tool for organizing csproj files. Groups and sorts ItemGroups based on item type, file extension, and </PackageDescription>
     <DevelopmentDependency>true</DevelopmentDependency>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>organize-csproj</ToolCommandName>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
     <RepositoryUrl>https://github.com/RoryDuncan/csproj-organizer</RepositoryUrl>
     <RepositoryBranch>main</RepositoryBranch>
     <PackageTags>csproj; organization; organisation; project organizer; csproj format</PackageTags>
@@ -38,5 +38,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="csproj.config.defaults.json" CopyToOutputDirectory="Always" />
+    <None Include="LICENSE.txt" Pack="true" PackagePath="$(PackageLicenseFile)" />
   </ItemGroup>
 </Project>
