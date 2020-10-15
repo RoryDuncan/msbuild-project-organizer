@@ -148,6 +148,9 @@
             "args": [
                 "test"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
             "group": "test",
             "presentation": {
                 "reveal": "always"
