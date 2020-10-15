@@ -9,13 +9,13 @@
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "Build Solution",
-            "program": "${workspaceFolder}/CSProjOrganizer/bin/Debug/netcoreapp3.1/CSProjOrganizer.dll",
+            "program": "${workspaceFolder}/src/csproj-organizer/bin/Debug/netcoreapp3.1/CSProjOrganizer.dll",
             "args": [
                 "--input=testfile.xml",
-                "--output=testfile.sorted.xml",
+                //"--output=testfile.sorted.xml",
                 "--config=testfile-config.json"
             ],
-            "cwd": "${workspaceFolder}/CSProjOrganizer",
+            "cwd": "${workspaceFolder}/src/csproj-organizer",
             "console": "internalConsole",
             "stopAtEntry": false
         },
