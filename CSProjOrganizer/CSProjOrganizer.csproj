@@ -9,6 +9,11 @@
     <DevelopmentDependency>true</DevelopmentDependency>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>organize-csproj</ToolCommandName>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <RepositoryUrl>https://github.com/RoryDuncan/csproj-organizer</RepositoryUrl>
+    <PackageLicenseUrl>https://github.com/RoryDuncan/csproj-organizer/blob/main/LICENSE</PackageLicenseUrl>
+    <RepositoryBranch>main</RepositoryBranch>
+    <PackageTags>csproj; organization; organisation; project organizer; csproj format</PackageTags>
     <PackageOutputPath>./package</PackageOutputPath>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>CSProjOrganizer</AssemblyName>
