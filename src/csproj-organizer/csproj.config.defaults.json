@@ -1,0 +1,19 @@
+{
+  "Configuration": {
+    "FileTypeItems": ["Content", "Compile", "TypeScriptCompile", "EmbeddedResource"],
+    "FileTypeGroupings": {
+      "Images": [".png", ".jpg", ".jpeg", ".gif", ".tiff", ".ico", ".icon", "webp", ".svg", ".bmp"],
+      "Stylesheets": [".css", ".less"]
+    },
+    "ItemGroupGroupings": {
+      "Published Files": ["Content"],
+      "Typescript and Type Definitions": ["TypeScriptCompile"],
+      "Non-build Files": ["None"],
+      "Assembly References": ["Reference"],
+      "Project References": ["ProjectReference"],
+      "NuGet Package References": ["PackageReference"],
+      "Folders": ["Folder"],
+      "Compiled C# Files": ["Compile", "CSFile"]
+    }
+  }
+}
