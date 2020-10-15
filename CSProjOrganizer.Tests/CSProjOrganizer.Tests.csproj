@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CSProjOrganizer\CSProjOrganizer.csproj" />
+    <ProjectReference Include="..\csproj-organizer\csproj-organizer.csproj" />
   </ItemGroup>
 
 </Project>

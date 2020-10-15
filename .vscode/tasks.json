@@ -71,7 +71,7 @@
             "type": "shell",
             "args": [
                 "publish",
-                "CSProjOrganizer/CSProjOrganizer.csproj"
+                "csproj-organizer/csproj-organizer.csproj"
             ],
             "group": "none",
             "presentation": {
@@ -86,10 +86,10 @@
             "args": [
                 "CSProjOrganizer.dll",
                 "--input",
-                "${workspaceFolder}/CSProjOrganizer/CSProjOrganizer.csproj"
+                "${workspaceFolder}/csproj-organizer/csproj-organizer.csproj"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/CSProjOrganizer/bin/Debug/netcoreapp3.1"
+                "cwd": "${workspaceFolder}/csproj-organizer/bin/Debug/netcoreapp3.1"
             },
             "group": "none",
             "presentation": {
@@ -145,7 +145,7 @@
             "type": "shell",
             "dependsOn": ["Build Solution"],
             "options": {
-                "cwd": "${workspaceFolder}/CSProjOrganizer"
+                "cwd": "${workspaceFolder}/csproj-organizer"
             },
             "args": [
                 "run",

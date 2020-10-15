@@ -3,4 +3,4 @@ obj/
 testfile.xml
 testfile.sorted.xml
 testfile-config.json
-CSProjOrganizer/package
+csproj-organizer/package
