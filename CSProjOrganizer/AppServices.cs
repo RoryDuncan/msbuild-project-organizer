@@ -24,7 +24,7 @@ namespace CSProjOrganizer
             // build configuration
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(configFile ?? AppSettings.DefaultConfigFileName, false)
+                .AddJsonFile(configFile ?? AppSettings.DefaultConfigFileName, true)
                 .Build();
 
             serviceCollection.Configure<SortConfiguration>(configuration.GetSection("Configuration"));
