@@ -13,11 +13,39 @@ dotnet organize-csproj --input=your-project.csproj
 ## Parameters
 
 
-| Parameter | Description | Default | Required |
-| --------- | ----------- | ------- | -------- |
-| `--input` | The path to a `.csproj` file | None | Yes |
-| `--output`| The filename to save the input`.csproj` after it has been sorted. | `--input`'s value | No |
-| `--config` | The path to a configuration json file | None | No |
+
+```
+--input
+```
+> **Description:** The path to a `.csproj` file.
+
+> **Default:** None
+
+> **Required:** Yes
+
+```
+--output
+```
+> **Description:** The filename to save the input`.csproj` after it has been sorted.
+
+> **Default:** The value of `--input` (overwrites existing file)
+
+> **Required:** No
+
+
+```
+--config
+```
+> **Description:** The path to a configuration json file
+
+> **Default:** None
+
+> **Required:** No
+
+### Example
+```
+dotnet organize-csproj --input=project.csproj --output=project.sorted.csproj --config=my.config.json
+```
 
 
 ## Configuration
