@@ -8,7 +8,7 @@
     "ItemGroupGroupings": {
       "Published Files": ["Content"],
       "Typescript and Type Definitions": ["TypeScriptCompile"],
-      "Ignored Files": ["None"],
+      "Non-build Files": ["None"],
       "Assembly References": ["Reference"],
       "Project References": ["ProjectReference"],
       "NuGet Package References": ["PackageReference"],

@@ -62,7 +62,7 @@ namespace CSProjOrganizer.Models
             ItemGroupGroupings.Add("Typescript and Type Definitions", new string[]{
                 "TypeScriptCompile"
             });
-            ItemGroupGroupings.Add("Ignored Files", new string[]{
+            ItemGroupGroupings.Add("Non-Build Files", new string[]{
                 "None"
             });
             ItemGroupGroupings.Add("Assembly References", new string[]{
