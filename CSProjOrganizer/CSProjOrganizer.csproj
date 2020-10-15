@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <PackageId>CSProj.Organizer</PackageId>
+    <PackageId>organize-csproj</PackageId>
     <Title>CSProj Organizer</Title>
     <Version>1.0.0</Version>
     <Authors>RoryDuncan</Authors>
@@ -17,7 +17,6 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>CSProjOrganizer</AssemblyName>
     <OutputType>Exe</OutputType>
-    <PackageId>CSProjOrganizer</PackageId>
     <RuntimeIdentifiers>win10-x86;win10-x64</RuntimeIdentifiers>
     <GenerateAssemblyConfigurationAttribute>false</GenerateAssemblyConfigurationAttribute>
     <GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>

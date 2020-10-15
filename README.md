@@ -20,9 +20,7 @@ Has some configuration. See [Sort Options](#sort-options).
 
 ## Usage
 
-```
-dotnet CSProjOrganizer.dll --input=project.csproj
-```
+[See Usage](USAGE.md)
 
 # Development
 
