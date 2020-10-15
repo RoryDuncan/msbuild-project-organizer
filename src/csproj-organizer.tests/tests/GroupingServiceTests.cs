@@ -61,7 +61,7 @@ namespace CSProjOrganizer.Tests
 
             var wasModified = _groupingService.Group(document, options);
 
-            Assert.True(wasModified, "The document wasnt modified");
+            Assert.True(wasModified, "The document was not modified");
 
             var itemGroups = document.Descendants("ItemGroup").ToList();
 
@@ -90,7 +90,7 @@ namespace CSProjOrganizer.Tests
 
             var wasModified = _groupingService.Group(document, options);
 
-            Assert.True(wasModified, "The document wasnt modified");
+            Assert.True(wasModified, "The document was not modified");
 
             var itemGroups = document.Descendants("ItemGroup").ToList();
 
@@ -119,7 +119,7 @@ namespace CSProjOrganizer.Tests
 
             var wasModified = _groupingService.Group(document, options);
 
-            Assert.True(wasModified, "The document wasnt modified");
+            Assert.True(wasModified, "The document was not modified");
 
             var itemGroups = document.Descendants("ItemGroup").ToList();
 
@@ -159,7 +159,7 @@ namespace CSProjOrganizer.Tests
 
             var wasModified = _groupingService.Group(document, options);
 
-            Assert.True(wasModified, "The document wasnt modified");
+            Assert.True(wasModified, "The document was not modified");
 
             var itemGroups = document.Descendants("ItemGroup").ToList();
             var itemGroup = itemGroups.First();
@@ -171,6 +171,38 @@ namespace CSProjOrganizer.Tests
             Assert.True(items.ElementAt(1).Attribute("Include").Value == orderedFiles.ElementAt(1), "ItemGroup wasn't sorted");
             Assert.True(items.ElementAt(2).Attribute("Include").Value == orderedFiles.ElementAt(2), "ItemGroup wasn't sorted");
             Assert.True(items.ElementAt(3).Attribute("Include").Value == orderedFiles.ElementAt(3), "ItemGroup wasn't sorted");
+        }
+
+        [Fact]
+        public void IsIdempotent()
+        {
+            var options = new SortOptions()
+            {
+                GroupByFileType = true,
+                GroupByNodeType = true,
+                SortItemsWithinItemGroups = true,
+                RemoveEmptyItemGroups = true,
+            };
+
+            var document = new XDocument(
+                new XElement("Project",
+                    new XElement("ItemGroup",
+                        new XElement("Content", new XAttribute("Include", "Alpha.cshtml")),
+                        new XElement("Content", new XAttribute("Include", "Beta.html")),
+                        new XElement("Content", new XAttribute("Include", "Charlie.js"))
+                    )
+                )
+            );
+
+            var wasModified = _groupingService.Group(document, options);
+
+            Assert.True(wasModified, "The document was not modified");
+
+            XDocument sortedDocument = new XDocument(document);
+
+            _groupingService.Group(document, options);
+
+            Assert.True(XNode.DeepEquals(sortedDocument, document), "Group method is not idempotent.");
         }
     }
 }

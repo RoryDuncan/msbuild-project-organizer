@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using System.Xml.Linq;
 using CSProjOrganizer.Interfaces;
 using CSProjOrganizer.Models;
@@ -96,6 +97,10 @@ namespace CSProjOrganizer.Services
             // Sort nodeGroupings by the name of their first child
             nodeGroupings = nodeGroupings.OrderBy(group => group.Elements().First().Name.LocalName).ToList();
 
+            IEnumerable<XComment> commentNodes = projectRoot.Nodes()
+                .Where( node => node.NodeType == XmlNodeType.Comment)
+                .Select( node => node as XComment);
+
             // and add them in their new groupings
             foreach (XElement group in nodeGroupings)
             {
@@ -103,6 +108,13 @@ namespace CSProjOrganizer.Services
                 {
                     // Add a label corrosponding to the itemgroup's contents
                     string label = this.GetItemGroupComment(group.Elements().First());
+
+                    // remove any previous comment with the same name
+                    var matchingComments = commentNodes.Where(comment => label.Equals(comment.Value?.Trim()));
+                    if (matchingComments.Count() > 0)
+                    {
+                        matchingComments.Remove();
+                    }
 
                     var comment = new XComment($" {label} ");
                     projectRoot.Add(comment);
@@ -125,7 +137,7 @@ namespace CSProjOrganizer.Services
             itemGroups
                 .Where(itemGroup => itemGroup.HasElements && this.IsItemWithFileTypeAttributes(itemGroup.Elements().First()))
                 .ToList()
-                .ForEach(itemGroup => OrganizeItemGroup(itemGroup));
+                .ForEach(itemGroup => this.OrganizeItemGroup(itemGroup));
 
             // log how it's changed
             int resultingCount = projectRoot.Descendants("ItemGroup").ToList().Count;
@@ -211,12 +223,11 @@ namespace CSProjOrganizer.Services
 
             if (newItemGroups.Count > 0)
             {
-                // add the new filetype-grouped <ItemGroup>'s immediately after this group
-
-                // add back to document
+                // add the new filetype-grouped <ItemGroup>'s before the current group
+                // CASE: adding before preserves document order
                 newItemGroups
                     .ToList()
-                    .ForEach(kvp => itemGroup.AddAfterSelf(kvp.Value));
+                    .ForEach(kvp => itemGroup.AddBeforeSelf(kvp.Value));
 
                 // remove the original <ItemGroup>
                 itemGroup.Remove();
