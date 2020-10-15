@@ -319,7 +319,9 @@ namespace CSProjOrganizer.Services
                 return _config.FileTypeItems.Contains(element.Name.LocalName);
             }
 
-            return element.Attribute("Include") != null;
+            // without an exclusion list the below line would sort PackageReferences and such
+            // return element.Attribute("Include") != null;
+            return false;
         }
 
         // in case we need items specifically from the MSBuild namespace
