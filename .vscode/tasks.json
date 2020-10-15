@@ -15,6 +15,9 @@
                 // Do not generate summary otherwise it leads to duplicate errors in Problems panel
                 "/consoleloggerparameters:NoSummary"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
             "group": "build",
             "presentation": {
                 "reveal": "always"
@@ -32,6 +35,9 @@
                 "--no-build",
                 "--nologo"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
             "group": "build",
             "presentation": {
                 "reveal": "always"
@@ -46,6 +52,9 @@
                 "publish",
                 "--nologo"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
             "group": "build",
             "presentation": {
                 "reveal": "always"
@@ -59,6 +68,9 @@
             "args": [
                 "run",
             ],
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
             "group": "build",
             "presentation": {
                 "reveal": "always"
@@ -73,6 +85,9 @@
                 "publish",
                 "csproj-organizer/csproj-organizer.csproj"
             ],
+            "options": {
+                "cwd": "${workspaceFolder}/src"
+            },
             "group": "none",
             "presentation": {
                 "reveal": "always"
@@ -86,10 +101,10 @@
             "args": [
                 "CSProjOrganizer.dll",
                 "--input",
-                "${workspaceFolder}/csproj-organizer/csproj-organizer.csproj"
+                "${workspaceFolder}/src/csproj-organizer/csproj-organizer.csproj"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/csproj-organizer/bin/Debug/netcoreapp3.1"
+                "cwd": "${workspaceFolder}/src/csproj-organizer/bin/Debug/netcoreapp3.1"
             },
             "group": "none",
             "presentation": {
@@ -145,7 +160,7 @@
             "type": "shell",
             "dependsOn": ["Build Solution"],
             "options": {
-                "cwd": "${workspaceFolder}/csproj-organizer"
+                "cwd": "${workspaceFolder}/src/csproj-organizer"
             },
             "args": [
                 "run",
