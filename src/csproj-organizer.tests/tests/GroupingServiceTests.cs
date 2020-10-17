@@ -222,9 +222,10 @@ namespace CSProjOrganizer.Tests
             var document = new XDocument(
                 new XElement(ns("Project"),
                     new XElement(ns("ItemGroup"),
-                        new XElement(ns("Content"), new XAttribute(ns("Include"), "Alpha.cshtml")),
-                        new XElement(ns("Content"), new XAttribute(ns("Include"), "Beta.html")),
-                        new XElement(ns("Content"), new XAttribute(ns("Include"), "Charlie.js"))
+                        new XElement(ns("Compile"), new XAttribute("Include", "Zeta.cs")),
+                        new XElement(ns("Content"), new XAttribute("Include", "Alpha.cshtml")),
+                        new XElement(ns("Content"), new XAttribute("Include", "Beta.html")),
+                        new XElement(ns("Content"), new XAttribute("Include", "Charlie.js"))
                     )
                 )
             );
