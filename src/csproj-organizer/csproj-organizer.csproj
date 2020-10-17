@@ -3,7 +3,7 @@
   <PropertyGroup>
     <PackageId>organize-csproj</PackageId>
     <Title>CSProj Organizer</Title>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>RoryDuncan</Authors>
     <PackageDescription>A tool for organizing csproj files. Groups and sorts ItemGroups based on item type and file extension. </PackageDescription>
     <DevelopmentDependency>true</DevelopmentDependency>
