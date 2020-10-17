@@ -3,9 +3,9 @@
 A console application for sorting `.csproj` files.
 Has some configuration. See [Sort Options](#sort-options).
 
-## Get it
+## Install
 
-[You can get the tool from NuGet](https://www.nuget.org/packages/organize-csproj)
+[You can install as a `dotnet tool` from NuGet](https://www.nuget.org/packages/organize-csproj)
 
 
 <h2 id="sort-options">Sort Options</h2>
