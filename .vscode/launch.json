@@ -13,7 +13,7 @@
             "args": [
                 "--input=testfile.xml",
                 //"--output=testfile.sorted.xml",
-                "--config=testfile-config.json"
+                //"--config=testfile2-config.json"
             ],
             "cwd": "${workspaceFolder}/src/csproj-organizer",
             "console": "internalConsole",

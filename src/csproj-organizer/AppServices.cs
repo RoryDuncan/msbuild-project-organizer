@@ -21,13 +21,16 @@ namespace CSProjOrganizer
             serviceCollection.AddLogging();
             serviceCollection.AddOptions();
 
-            // build configuration
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile(configFile ?? AppSettings.DefaultConfigFileName, true)
-                .Build();
+            if (configFile != null)
+            {
+                // build configuration
+                var configuration = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile(configFile, false)
+                    .Build();
 
-            serviceCollection.Configure<SortConfiguration>(configuration.GetSection("Configuration"));
+                serviceCollection.Configure<SortConfiguration>(configuration.GetSection("Configuration"));
+            }
 
             AppServices.AddServices(serviceCollection);
 
