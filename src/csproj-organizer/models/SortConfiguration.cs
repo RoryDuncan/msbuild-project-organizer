@@ -66,6 +66,10 @@ namespace CSProjOrganizer.Models
                 ".css", ".less",
             });
 
+            FileTypeGroupings.Add("Razor Files", new string[] {
+                ".cshtml"
+            });
+
             var ItemGroupGroupings = new Dictionary<string, IEnumerable<string>>();
 
             ItemGroupGroupings.Add("Published Files", new string[]{
