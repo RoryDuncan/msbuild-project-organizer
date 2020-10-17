@@ -22,7 +22,7 @@ namespace CSProjOrganizer.Tests
             var logger = Mock.Of<ILogger<GroupingService>>();
             var config = SortConfiguration.CreateWithDefaults();
 
-            _groupingService = new GroupingService(logger, Options.Create(config));
+            _groupingService = new GroupingService(logger, config);
         }
 
         [Fact]

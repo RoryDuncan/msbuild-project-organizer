@@ -13,13 +13,13 @@ namespace CSProjOrganizer
         private readonly IXmlService _xmlService;
         private readonly IGroupingService _groupingService;
 
-        public App(IOptions<SortConfiguration> config,
+        public App(SortConfiguration config,
                    ILogger<App> logger,
                    IXmlService xmlService,
                    IGroupingService groupingService)
         {
             _logger = logger;
-            _config = config.Value ?? SortConfiguration.CreateWithDefaults();
+            _config = config;
             _xmlService = xmlService;
             _groupingService = groupingService;
         }
@@ -42,6 +42,11 @@ namespace CSProjOrganizer
             XDocument document = _xmlService.GetDocument(input);
 
 
+            if (_config.IsDefault)
+            {
+                _logger.LogInformation("Using default configuration");
+            }
+
             if (_config.SortOptions is null)
             {
                 _logger.LogInformation("Using default sort options");
@@ -62,6 +67,10 @@ namespace CSProjOrganizer
             {
                 _logger.LogInformation("Sort complete.");
                 _xmlService.SaveDocument(output, document);
+            }
+            else
+            {
+                _logger.LogInformation($"No modifications were necessary for '{input}'.");
             }
 
             _logger.LogInformation("Done.");

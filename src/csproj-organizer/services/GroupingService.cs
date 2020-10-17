@@ -21,11 +21,10 @@ namespace CSProjOrganizer.Services
         private readonly SortConfiguration _config;
         private IXmlNameProvider _name;
 
-        public GroupingService(ILogger<GroupingService> logger,
-            IOptions<SortConfiguration> config)
+        public GroupingService(ILogger<GroupingService> logger, SortConfiguration config)
         {
             _logger = logger;
-            _config = config.Value;
+            _config = config;
         }
 
         /// <summary>

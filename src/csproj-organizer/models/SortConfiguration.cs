@@ -4,6 +4,7 @@ namespace CSProjOrganizer.Models
 {
     public class SortConfiguration
     {
+        public readonly bool IsDefault;
         public SortOptions SortOptions { get; set; }
 
         /// <summary>
@@ -32,6 +33,17 @@ namespace CSProjOrganizer.Models
         /// Labels for ItemGroups, displaying as comments before that group
         /// </summary>
         public Dictionary<string, IEnumerable<string>> ItemGroupGroupings { get; set; }
+
+
+        public SortConfiguration()
+        {
+
+        }
+
+        public SortConfiguration(bool isDefault)
+        {
+            IsDefault = isDefault;
+        }
 
         public static SortConfiguration CreateWithDefaults()
         {
@@ -82,7 +94,7 @@ namespace CSProjOrganizer.Models
             });
 
 
-            var defaults = new SortConfiguration()
+            var defaults = new SortConfiguration(isDefault: true)
             {
                 FileTypeItems = FileTypeItems,
                 FileTypeGroupings = FileTypeGroupings,

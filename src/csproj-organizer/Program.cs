@@ -40,10 +40,9 @@ namespace CSProjOrganizer
         private static void AppStart(string input, string output = null, string config = null)
         {
             // setup services
-            var serviceCollection = AppServices.Configure(config);
+            var serviceProvider = AppServices.Configure(config);
 
-            // create service provider
-            var serviceProvider = serviceCollection.BuildServiceProvider();
+
 
             serviceProvider.GetService<App>().Run(input, output);
         }
