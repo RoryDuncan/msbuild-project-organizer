@@ -17,11 +17,9 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 3.1.301
-    - name: set cwd to src
-      run: cd src
     - name: Install dependencies
-      run: dotnet restore
+      run: dotnet restore src/csproj-organizer.sln
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build --no-restore src/csproj-organizer.sln
     - name: Test
-      run: dotnet test --no-restore --verbosity normal
+      run: dotnet test --no-restore --verbosity normal src/csproj-organizer.sln
