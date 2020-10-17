@@ -55,3 +55,35 @@ It should work as a solid reference to get yourself started.
 The configuration needs to map to [SortConfiguration.cs](CSProjOrganizer/Models/SortConfiguration.cs).
 
 If this isn't sufficient documentation, open an issue and I'll write out more.
+
+## Sort Options
+
+Below are the primary steps taken when cleaning up a `.csproj` file. 
+
+They each can be disabled using your own configuration file, like so:
+``` json
+{
+  "SortOptions": {
+    "GroupByNodeType": true,
+    "GroupByFileType": true,
+    "RemoveEmptyItemGroups": true,
+    "SortItemsWithinItemGroups": true
+  }
+}
+```
+
+They all default to `true`.
+
+- `GroupByNodeType`
+    -  Groups all `Item`s of the same type into their own `<ItemGroup>`
+
+        (e.g., `<Content>`, `<Compile>`, `<TypeScriptCompile>`, etc)
+-  `GroupByFileType`
+    - Creates `<ItemGroup>`s for each distinct filetype
+    - Subdivides existing `<ItemGroup>`s into even more granular `<ItemGroup>`s
+- `RemoveEmptyItemGroups`
+    - Removes `<ItemGroup>`s without any children. The tool doesn't create empty `<ItemGroup>`s―this option is for tidying up.
+- `SortItemsWithinItemGroups`
+    - Whether to alphanum sort all `<ItemGroup>`s. Performed last.
+
+
