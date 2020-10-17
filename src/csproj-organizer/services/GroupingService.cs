@@ -15,10 +15,11 @@ namespace CSProjOrganizer.Services
 
     public class GroupingService : IGroupingService
     {
-        private readonly string xmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
+        private readonly string MSBuildXmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
 
         private readonly ILogger<GroupingService> _logger;
         private readonly SortConfiguration _config;
+        private IXmlNameProvider _name;
 
         public GroupingService(ILogger<GroupingService> logger,
             IOptions<SortConfiguration> config)
@@ -32,11 +33,16 @@ namespace CSProjOrganizer.Services
         /// </summary>
         public bool Group(XDocument document, SortOptions options)
         {
-            if (!HasProjectRoot(document))
+            if (!HasProjectRoot(document, out XNamespace xmlns))
             {
                 _logger.LogInformation("No <Project> found within document. Nothing to sort.");
                 return false;
             }
+
+            XDocument beforeChanges = new XDocument(document);
+
+            // provider is dependent on the data passed-in, so DI not as straight-forward
+            _name = new XmlNameProvider(xmlns);
 
             if (options.GroupByNodeType)
             {
@@ -58,7 +64,8 @@ namespace CSProjOrganizer.Services
                 this.SortItemGroupItems(document);
             }
 
-            return true;
+            bool wasModified = !XNode.DeepEquals(beforeChanges, document);
+            return wasModified;
         }
 
         /// <summary>
@@ -71,7 +78,7 @@ namespace CSProjOrganizer.Services
             var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
             // only operate on ItemGroups without "Condition" attributes
-            var initialGroups = itemGroups.Where(group => group.Attribute("Condition") is null);
+            var initialGroups = itemGroups.Where(group => group.Attribute(_name.Condition) is null);
 
             List<XElement> itemGroupChildren = initialGroups.Elements().ToList();
 
@@ -140,7 +147,7 @@ namespace CSProjOrganizer.Services
                 .ForEach(itemGroup => this.OrganizeItemGroup(itemGroup));
 
             // log how it's changed
-            int resultingCount = projectRoot.Descendants("ItemGroup").ToList().Count;
+            int resultingCount = projectRoot.Descendants(_name.ItemGroup).ToList().Count;
             _logger.LogInformation($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
         }
 
@@ -186,8 +193,8 @@ namespace CSProjOrganizer.Services
 
         private (XElement projectRoot, List<XElement> itemGroups) GetRootAndItemGroups(XDocument document)
         {
-            XElement projectRoot = document.Element("Project");
-            List<XElement> itemGroups = projectRoot.Descendants("ItemGroup").ToList();
+            XElement projectRoot = document.Element(_name.Project);
+            List<XElement> itemGroups = projectRoot.Descendants(_name.ItemGroup).ToList();
 
             return (projectRoot, itemGroups);
         }
@@ -195,7 +202,7 @@ namespace CSProjOrganizer.Services
         private void OrganizeItemGroup(XElement itemGroup)
         {
             Dictionary<string, XElement> newItemGroups = new Dictionary<string, XElement>();
-            string previousLabel = (string)itemGroup.Attribute("Label") ?? string.Empty;
+            string previousLabel = (string)itemGroup.Attribute(_name.Label) ?? string.Empty;
             // for each item of the group, check it's file type and add it to an itemgroup of similar filetypes
             itemGroup.Elements().ToList().ForEach(element =>
             {
@@ -210,7 +217,7 @@ namespace CSProjOrganizer.Services
 
                     if (label != null)
                     {
-                        value.SetAttributeValue("Label", label);
+                        value.SetAttributeValue(_name.Label, label);
                     }
 
                     newItemGroups.Add(key, value);
@@ -293,7 +300,7 @@ namespace CSProjOrganizer.Services
 
         private string GetFilePath(XElement element)
         {
-            XAttribute includeAttr = element.Attribute("Include");
+            XAttribute includeAttr = element.Attribute(_name.Include);
             if (includeAttr is null)
             {
                 return null;
@@ -324,21 +331,24 @@ namespace CSProjOrganizer.Services
             return false;
         }
 
-        // in case we need items specifically from the MSBuild namespace
-        private XName Name(string name)
+        private bool HasProjectRoot(XDocument document, out XNamespace xmlns)
         {
-            return XName.Get(name, xmlns);
-        }
+            xmlns = XNamespace.None;
+            XName msbuildProject = XName.Get("Project", MSBuildXmlns);
+            XName unspecifiedProject = XName.Get("Project");
+            XElement projectRoot = document.Element(unspecifiedProject) ?? document.Element(msbuildProject);
 
-        private bool HasProjectRoot(XDocument document)
-        {
-            XElement projectRoot = document.Element("Project");
+            if (projectRoot != null)
+            {
+                xmlns = projectRoot.Name.Namespace;
+            }
+
             return !(projectRoot is null);
         }
 
         private XElement CreateItemGroup()
         {
-            return new XElement("ItemGroup");
+            return new XElement(_name.ItemGroup);
         }
 
         private string GetItemGroupComment(XElement element)

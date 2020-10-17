@@ -204,5 +204,34 @@ namespace CSProjOrganizer.Tests
 
             Assert.True(XNode.DeepEquals(sortedDocument, document), "Group method is not idempotent.");
         }
+
+        [Fact]
+        public void HandlesMSBuildNamespace()
+        {
+            string MSBuildXmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
+            Func<string, XName> ns = (string name) => XName.Get(name, MSBuildXmlns);
+
+            var options = new SortOptions()
+            {
+                GroupByFileType = true,
+                GroupByNodeType = true,
+                SortItemsWithinItemGroups = true,
+                RemoveEmptyItemGroups = true,
+            };
+
+            var document = new XDocument(
+                new XElement(ns("Project"),
+                    new XElement(ns("ItemGroup"),
+                        new XElement(ns("Content"), new XAttribute(ns("Include"), "Alpha.cshtml")),
+                        new XElement(ns("Content"), new XAttribute(ns("Include"), "Beta.html")),
+                        new XElement(ns("Content"), new XAttribute(ns("Include"), "Charlie.js"))
+                    )
+                )
+            );
+
+            var wasModified = _groupingService.Group(document, options);
+
+            Assert.True(wasModified, "Document wasn't modified because of namespaces");
+        }
     }
 }
