@@ -17,14 +17,13 @@ namespace CSProjOrganizer.Services
             return _xmlns.GetName(name);
         }
 
-        public XName Include => Get("Exclude");
-
-        public XName Exclude => Get("Exclude");
-
         public XName ItemGroup => Get("ItemGroup");
-
         public XName Project => Get("Project");
-        public XName Label => Get("Label");
-        public XName Condition => Get("Condition");
+
+        // Attributes don't need scoping to an XMLNS
+        public XName Label => XName.Get("Label");
+        public XName Include => XName.Get("Include");
+        public XName Exclude => XName.Get("Exclude");
+        public XName Condition => XName.Get("Condition");
     }
 }

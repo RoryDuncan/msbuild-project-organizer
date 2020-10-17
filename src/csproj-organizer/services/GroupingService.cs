@@ -205,8 +205,8 @@ namespace CSProjOrganizer.Services
             // for each item of the group, check it's file type and add it to an itemgroup of similar filetypes
             itemGroup.Elements().ToList().ForEach(element =>
             {
-                string filePath = this.GetFilePath(element) ?? null;
-                string fileType = this.GetFileExtension(filePath) ?? null;
+                string filePath = this.GetFilePath(element);
+                string fileType = this.GetFileExtension(filePath);
                 string label = this.GetGroupingLabelOrDefault(fileType, filePath);
                 string key = label ?? "__misc__";
 
@@ -300,7 +300,7 @@ namespace CSProjOrganizer.Services
         private string GetFilePath(XElement element)
         {
             XAttribute includeAttr = element.Attribute(_name.Include);
-            if (includeAttr is null)
+            if (includeAttr is null || string.IsNullOrWhiteSpace(includeAttr?.Value))
             {
                 return null;
             }
@@ -314,8 +314,8 @@ namespace CSProjOrganizer.Services
             {
                 return null;
             }
-
-            return Path.GetExtension(filePath);
+            string extension = Path.GetExtension(filePath);
+            return string.IsNullOrWhiteSpace(extension) ? null : extension;
         }
 
         private bool IsItemWithFileTypeAttributes(XElement element)
