@@ -1,6 +1,9 @@
 # CSProjOrganizer
+### aka `dotnet tool organize-csproj`
+[![Unit Tests](https://github.com/RoryDuncan/csproj-organizer/workflows/.NET%20Core/badge.svg)](https://github.com/RoryDuncan/csproj-organizer/actions?query=workflow%3A%22.NET+Core%22)
 
 A console application for organizing messy `.csproj` files.
+
 
 ## Install
 
