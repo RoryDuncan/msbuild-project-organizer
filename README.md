@@ -15,7 +15,7 @@ A console application for organizing messy `.csproj` files.
 
 # Development
 
-2. `dotnet build`
+Run `dotnet build src`
 
 ### Run Tests
 Run `dotnet test`.
