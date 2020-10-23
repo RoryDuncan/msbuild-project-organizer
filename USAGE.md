@@ -7,7 +7,7 @@ dotnet tool install -g organize-csproj
 
 Then, use it via:
 ```
-dotnet organize-csproj --input=your-project.csproj
+organize-csproj --input=your-project.csproj
 ```
 
 ## CLI Arguments
