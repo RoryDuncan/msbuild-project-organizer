@@ -6,6 +6,9 @@ using CSProjOrganizer.Interfaces;
 
 namespace CSProjOrganizer
 {
+    /// <summary>
+    /// csproj organizer
+    /// </summary>
     public class App
     {
         private readonly ILogger<App> _logger;
@@ -13,6 +16,13 @@ namespace CSProjOrganizer
         private readonly IXmlService _xmlService;
         private readonly IGroupingService _groupingService;
 
+        /// <summary>
+        /// App constructor
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="logger"></param>
+        /// <param name="xmlService"></param>
+        /// <param name="groupingService"></param>
         public App(SortConfiguration config,
                    ILogger<App> logger,
                    IXmlService xmlService,
@@ -24,6 +34,11 @@ namespace CSProjOrganizer
             _groupingService = groupingService;
         }
 
+        /// <summary>
+        /// Reads, organizes, and saves a csproj file
+        /// </summary>
+        /// <param name="input">The file to read and organize</param>
+        /// <param name="output">A file where the results should be saved — defaults to <see param="input" /></param>
         public void Run(string input, string output)
         {
             if (!IsValid(input))
