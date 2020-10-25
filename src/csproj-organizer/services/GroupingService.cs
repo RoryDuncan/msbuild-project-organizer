@@ -13,6 +13,9 @@ using Microsoft.Extensions.Options;
 namespace CSProjOrganizer.Services
 {
 
+    /// <summary>
+    /// An implementation of IGroupingService
+    /// </summary>
     public class GroupingService : IGroupingService
     {
         private readonly string MSBuildXmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
@@ -21,15 +24,18 @@ namespace CSProjOrganizer.Services
         private readonly SortConfiguration _config;
         private IXmlNameProvider _name;
 
+        /// <summary>
+        /// Create an instance of GroupingService
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="config"></param>
         public GroupingService(ILogger<GroupingService> logger, SortConfiguration config)
         {
             _logger = logger;
             _config = config;
         }
 
-        /// <summary>
-        /// Groups and sorts the XDocument's ItemGroup. Returns a bool indicating if the document was modified or not.
-        /// </summary>
+        /// <inheritdoc />
         public bool Group(XDocument document, SortOptions options)
         {
             if (!HasProjectRoot(document, out XNamespace xmlns))
@@ -131,7 +137,7 @@ namespace CSProjOrganizer.Services
         }
 
         /// <summary>
-        /// Groups items within ItemGroups into new ItemGroups based on file type and any custom groupings provided in <see cref="AppSettings" />
+        /// Groups items within ItemGroups into new ItemGroups based on file type and any custom groupings provided in <see cref="SortOptions" />
         /// </summary>
         public void GroupByFileType(XDocument document)
         {
@@ -272,7 +278,7 @@ namespace CSProjOrganizer.Services
         }
 
         /// <summary>
-        /// Gets a label of a grouping for a specific filetype, if available. See <see cref="AppSettings.Groupings" />
+        /// Gets a label of a grouping for a specific filetype, if available. See <see cref="SortConfiguration.Groupings" />
         /// </summary>
         private bool TryGetGrouping(object configGroup, string value, out string label)
         {
