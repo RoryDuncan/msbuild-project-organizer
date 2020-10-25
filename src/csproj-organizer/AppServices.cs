@@ -11,7 +11,7 @@ using Microsoft.Extensions.Logging;
 namespace CSProjOrganizer
 {
     /// <summary>
-    /// Helper for configuring the services required by <see cref="App">App</see>
+    /// Helper for configuring the services required by <see cref="ProjectOrganizer">ProjectOrganizer</see>
     /// </summary>
     public class AppServices
     {
@@ -34,7 +34,7 @@ namespace CSProjOrganizer
 
             AppServices.AddSortConfiguration(serviceCollection, configFile);
             AppServices.AddServices(serviceCollection);
-            serviceCollection.AddTransient<App>();
+            serviceCollection.AddTransient<ProjectOrganizer>();
 
             // create service provider
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();

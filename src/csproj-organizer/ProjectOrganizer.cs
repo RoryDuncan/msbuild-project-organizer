@@ -7,11 +7,11 @@ using CSProjOrganizer.Interfaces;
 namespace CSProjOrganizer
 {
     /// <summary>
-    /// csproj organizer
+    /// A class for Organizing Project files (.csproj)
     /// </summary>
-    public class App
+    public class ProjectOrganizer
     {
-        private readonly ILogger<App> _logger;
+        private readonly ILogger<ProjectOrganizer> _logger;
         private readonly SortConfiguration _config;
         private readonly IXmlService _xmlService;
         private readonly IGroupingService _groupingService;
@@ -23,8 +23,8 @@ namespace CSProjOrganizer
         /// <param name="logger"></param>
         /// <param name="xmlService"></param>
         /// <param name="groupingService"></param>
-        public App(SortConfiguration config,
-                   ILogger<App> logger,
+        public ProjectOrganizer(SortConfiguration config,
+                   ILogger<ProjectOrganizer> logger,
                    IXmlService xmlService,
                    IGroupingService groupingService)
         {
