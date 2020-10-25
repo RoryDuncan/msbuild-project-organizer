@@ -42,8 +42,6 @@ namespace CSProjOrganizer
             // setup services
             var serviceProvider = AppServices.Configure(config);
 
-
-
             serviceProvider.GetService<App>().Run(input, output);
         }
     }
