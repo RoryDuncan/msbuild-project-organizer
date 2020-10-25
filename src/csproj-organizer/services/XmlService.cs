@@ -8,15 +8,22 @@ using Microsoft.Extensions.Options;
 
 namespace CSProjOrganizer.Services
 {
+    /// <summary>
+    /// Implementation of IXMLService
+    /// </summary>
     public class XmlService : IXmlService
     {
         private readonly ILogger<XmlService> _logger;
-
+        /// <summary>
+        /// Create an XmlService
+        /// </summary>
+        /// <param name="logger"></param>
         public XmlService(ILogger<XmlService> logger)
         {
             _logger = logger;
         }
 
+        /// <inheritdoc />
         public XDocument GetDocument(string filePath)
         {
             _logger.LogInformation($"Loading Document: {filePath}.");
@@ -24,6 +31,7 @@ namespace CSProjOrganizer.Services
             return document;
         }
 
+        /// <inheritdoc />
         public void SaveDocument(string fileName, XDocument document)
         {
             _logger.LogInformation($"Saving Document as {fileName}.");
