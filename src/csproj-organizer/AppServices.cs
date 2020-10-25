@@ -10,8 +10,16 @@ using Microsoft.Extensions.Logging;
 
 namespace CSProjOrganizer
 {
+    /// <summary>
+    /// Helper for configuring the services required by <see cref="App">App</see>
+    /// </summary>
     public class AppServices
     {
+        /// <summary>
+        /// Performs setup of our service collection and service provider
+        /// </summary>
+        /// <param name="configFile"></param>
+        /// <returns></returns>
         public static IServiceProvider Configure(string configFile = null)
         {
             IServiceCollection serviceCollection = new ServiceCollection();
