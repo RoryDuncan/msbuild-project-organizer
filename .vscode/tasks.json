@@ -5,6 +5,7 @@
     "tasks": [
         {
             "label": "Build Solution",
+            "detail": "Builds 'csproj-organizer' and 'csproj-organizer.tests' projects",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -17,6 +18,24 @@
             ],
             "options": {
                 "cwd": "${workspaceFolder}/src"
+            },
+            "group": "build",
+            "presentation": {
+                "reveal": "always"
+            },
+            "problemMatcher": "$msCompile"
+        },
+        {
+            "label": "Build Project",
+            "detail": "Builds the csproj-organizer project",
+            "command": "dotnet",
+            "type": "shell",
+            "args": [
+                "build",
+                "--nologo"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}/src/csproj-organizer"
             },
             "group": "build",
             "presentation": {
@@ -63,6 +82,7 @@
         },
         {
             "label": "Run Application",
+            "detail": "Performs 'dotnet run' on the currently built project",
             "command": "dotnet",
             "type": "shell",
             "args": [
