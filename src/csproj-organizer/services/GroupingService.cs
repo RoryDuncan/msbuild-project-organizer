@@ -282,7 +282,7 @@ namespace CSProjOrganizer.Services
         }
 
         /// <summary>
-        /// Gets a label of a grouping for a specific filetype, if available. See <see cref="SortConfiguration.Groupings" />
+        /// Gets a label of a grouping for a specific filetype, if available. See <see cref="SortConfiguration.FileTypeGroupings" />
         /// </summary>
         private bool TryGetGrouping(object configGroup, string value, out string label)
         {
