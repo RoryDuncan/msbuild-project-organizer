@@ -4,7 +4,14 @@ namespace CSProjOrganizer.Models
 {
     public class SortConfiguration
     {
+        /// <summary>
+        /// Whether this configuration is the default configuration or not
+        /// </summary>
         public readonly bool IsDefault;
+        /// <summary>
+        /// The options for controlling how sortings are performed
+        /// </summary>
+        /// <value></value>
         public SortOptions SortOptions { get; set; }
 
         /// <summary>
@@ -34,17 +41,27 @@ namespace CSProjOrganizer.Models
         /// </summary>
         public Dictionary<string, IEnumerable<string>> ItemGroupGroupings { get; set; }
 
-
+        /// <summary>
+        /// Default ctor
+        /// </summary>
         public SortConfiguration()
         {
 
         }
 
+        /// <summary>
+        /// Create an instance of Sort Configuration with isDefault set
+        /// </summary>
+        /// <param name="isDefault"></param>
         public SortConfiguration(bool isDefault)
         {
             IsDefault = isDefault;
         }
 
+        /// <summary>
+        /// Create an instance of SortConfiguration with default sortings
+        /// </summary>
+        /// <returns></returns>
         public static SortConfiguration CreateWithDefaults()
         {
 
