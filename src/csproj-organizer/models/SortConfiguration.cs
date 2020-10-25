@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace CSProjOrganizer.Models
 {
+    /// <summary>
+    /// Configuration for sorting
+    /// </summary>
     public class SortConfiguration
     {
         /// <summary>
