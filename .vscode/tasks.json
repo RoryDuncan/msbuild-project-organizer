@@ -69,7 +69,7 @@
                 "run",
             ],
             "options": {
-                "cwd": "${workspaceFolder}/src"
+                "cwd": "${workspaceFolder}/src/csproj-organizer"
             },
             "group": "build",
             "presentation": {
