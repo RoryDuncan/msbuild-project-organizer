@@ -169,6 +169,10 @@ namespace CSProjOrganizer.Services
                 .ForEach(emptyGroup => emptyGroup.Remove());
         }
 
+        /// <summary>
+        /// Performs a final sort on all items within all ItemGroups
+        /// </summary>
+        /// <param name="document"></param>
         public void SortItemGroupItems(XDocument document)
         {
             var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
