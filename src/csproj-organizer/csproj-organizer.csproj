@@ -10,9 +10,9 @@
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>organize-csproj</ToolCommandName>
     <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
-    <RepositoryUrl>https://github.com/RoryDuncan/csproj-organizer</RepositoryUrl>
+    <RepositoryUrl>https://github.com/RoryDuncan/msbuild-project-organizer</RepositoryUrl>
     <RepositoryBranch>main</RepositoryBranch>
-    <PackageTags>csproj; organization; organisation; project organizer; csproj format</PackageTags>
+    <PackageTags>csproj; organization; organisation; project organizer; csproj format; msbuild tools; msbuild project</PackageTags>
     <PackageOutputPath>../../package</PackageOutputPath>
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyName>CSProjOrganizer</AssemblyName>
