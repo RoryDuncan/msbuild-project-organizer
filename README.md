@@ -70,3 +70,7 @@ _Some messy XML_
   </ItemGroup>
 </Project>
 ```
+
+You can also see the dogfooding examples:
+- [csproj-organizer/csproj-organizer.csproj](csproj-organizer.csproj)
+- [csproj-organizer/csproj-organizer.tests.csproj](csproj-organizer.test.csproj)

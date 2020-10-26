@@ -1,17 +1,30 @@
 # Usage
 
-Install as a global dotnet tool.
-```
-dotnet tool install -g organize-csproj
-```
+[Install from NuGet as a global dotnet tool.](https://www.nuget.org/packages/organize-csproj)
 
-Then, use it via:
+Then, use it on a project file:
 ```
 organize-csproj --input=your-project.csproj
 ```
 
+Alternatively, you can use it on a solution file to organize all Projects associated with the solution. 
+Simply run the below line in the directory where a `.sln` file exists.
+```
+organize-csproj --scan
+```
+
 ## CLI Arguments
 
+Use `--help` to see command line arguments for the version you're using.
+
+### On a Solution File
+
+You can use a solution file to organize all associated project files, you only need to use the `--scan` flag:
+```
+--scan
+```
+
+### Individual Project files
 ```
 --input
 ```
@@ -39,7 +52,6 @@ organize-csproj --input=your-project.csproj
 **Default:** None
 
 **Required:** No
-
 ---
 
 ### Example
