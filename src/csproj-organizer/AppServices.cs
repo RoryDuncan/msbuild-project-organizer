@@ -35,6 +35,7 @@ namespace CSProjOrganizer
             AppServices.AddSortConfiguration(serviceCollection, configFile);
             AppServices.AddServices(serviceCollection);
             serviceCollection.AddTransient<ProjectOrganizer>();
+            serviceCollection.AddTransient<SolutionOrganizer>();
 
             // create service provider
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();

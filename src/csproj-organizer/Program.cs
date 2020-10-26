@@ -15,7 +15,8 @@ namespace CSProjOrganizer
         /// <param name="input">The csproj file that should be sorted</param>
         /// <param name="output">The output file path, if the result should be saved to a new file</param>
         /// <param name="config">The path to a configuration file</param>
-        public static void Main(bool scan = false, string input = null, string output = null, string config = null)
+        /// <param name="sln">The path to a specific solution file. This is only necessary if you have multiple .sln files in the current directory.</param>
+        public static void Main(bool scan = false, string input = null, string output = null, string config = null, string sln = null)
         {
             if (!scan && input is null && output is null && config is null) 
             {
@@ -25,7 +26,7 @@ namespace CSProjOrganizer
 
             if (scan)
             {
-
+                Program.OrganizeSolution(sln);
             }
             else
             {
@@ -41,12 +42,12 @@ namespace CSProjOrganizer
             serviceProvider.GetService<ProjectOrganizer>().Run(input, output);
         }
 
-        private static void OrganizeSolution()
+        private static void OrganizeSolution(string solutionFile = null)
         {
             // setup services
             var serviceProvider = AppServices.Configure(null);
 
-            //serviceProvider.GetService<App>().Run(input, output);
+            serviceProvider.GetService<SolutionOrganizer>().Run(solutionFile);
         }
     }
 }
