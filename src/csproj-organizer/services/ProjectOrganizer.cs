@@ -7,9 +7,9 @@ using CSProjOrganizer.Interfaces;
 namespace CSProjOrganizer
 {
     /// <summary>
-    /// A class for Organizing Project files (.csproj)
+    /// An implementation of IProjectOrganizer
     /// </summary>
-    public class ProjectOrganizer
+    public class ProjectOrganizer : IProjectOrganizer
     {
         private readonly ILogger<ProjectOrganizer> _logger;
         private readonly SortConfiguration _config;
@@ -34,11 +34,7 @@ namespace CSProjOrganizer
             _groupingService = groupingService;
         }
 
-        /// <summary>
-        /// Reads, organizes, and saves a csproj file
-        /// </summary>
-        /// <param name="input">The file to read and organize</param>
-        /// <param name="output">A file where the results should be saved — defaults to <see param="input" /></param>
+        /// <inheritdoc />
         public void Run(string input, string output)
         {
             if (!IsValid(input))
