@@ -26,7 +26,7 @@ namespace CSProjOrganizer.Services
         /// <inheritdoc />
         public XDocument GetDocument(string filePath)
         {
-            _logger.LogInformation($"Loading Document: {filePath}.");
+            _logger.LogDebug($"Loading Document: {filePath}.");
             XDocument document = XDocument.Load(filePath);
             return document;
         }
@@ -34,7 +34,7 @@ namespace CSProjOrganizer.Services
         /// <inheritdoc />
         public void SaveDocument(string fileName, XDocument document)
         {
-            _logger.LogInformation($"Saving Document as {fileName}.");
+            _logger.LogDebug($"Saving Document as {fileName}.");
 
             var settings = new XmlWriterSettings()
             {

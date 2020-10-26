@@ -1,5 +1,6 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace CSProjOrganizer
 {
@@ -24,30 +25,32 @@ namespace CSProjOrganizer
                 return;
             }
 
-            if (scan)
+            // need to wait for logger disposal, or else it won't show the entire log
+            using (var logger = AppServices.GetLogger())
             {
-                Program.OrganizeSolution(sln);
-            }
-            else
-            {
-                Program.OrganizeCSProj(input, output, config);
+                // setup services
+                var serviceProvider = AppServices.Configure(logger, scan ? null : config);
+
+                if (scan)
+                {
+                    Program.OrganizeSolution(serviceProvider, sln);
+                }
+                else
+                {
+                    Program.OrganizeCSProj(serviceProvider, input, output, config);
+                }
             }
         }
 
-        private static void OrganizeCSProj(string input, string output = null, string config = null)
+        private static void OrganizeCSProj(IServiceProvider services, string input, string output = null, string config = null)
         {
-            // setup services
-            var serviceProvider = AppServices.Configure(config);
-
-            serviceProvider.GetService<ProjectOrganizer>().Run(input, output);
+            services.GetService<IProjectOrganizer>().Run(input, output);
         }
 
-        private static void OrganizeSolution(string solutionFile = null)
+        private static void OrganizeSolution(IServiceProvider services, string solutionFile = null)
         {
-            // setup services
-            var serviceProvider = AppServices.Configure(null);
+            services.GetService<SolutionOrganizer>().Run(solutionFile);
 
-            serviceProvider.GetService<SolutionOrganizer>().Run(solutionFile);
         }
     }
 }

@@ -40,7 +40,7 @@ namespace CSProjOrganizer.Services
         {
             if (!HasProjectRoot(document, out XNamespace xmlns))
             {
-                _logger.LogInformation("No <Project> found within document. Nothing to sort.");
+                _logger.LogWarning("No <Project> found within document. Nothing to sort.");
                 return false;
             }
 
@@ -144,7 +144,7 @@ namespace CSProjOrganizer.Services
             var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
             int initialCount = itemGroups.Count;
-            _logger.LogInformation($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
+            _logger.LogDebug($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
 
             itemGroups
                 .Where(itemGroup => itemGroup.HasElements && this.IsItemWithFileTypeAttributes(itemGroup.Elements().First()))
@@ -153,7 +153,7 @@ namespace CSProjOrganizer.Services
 
             // log how it's changed
             int resultingCount = projectRoot.Descendants(_name.ItemGroup).ToList().Count;
-            _logger.LogInformation($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
+            _logger.LogDebug($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
         }
 
         /// <summary>

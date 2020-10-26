@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Build.Construction;
 using Microsoft.Extensions.Logging;
 
 namespace CSProjOrganizer
@@ -30,6 +32,28 @@ namespace CSProjOrganizer
         /// </summary>
         public void Run(string solutionFile = null)
         {
+            solutionFile = this.GetSolutionFile(solutionFile);
+
+            _logger.LogDebug($"Solution file found: {solutionFile}");
+
+            SolutionFile solution = SolutionFile.Parse(solutionFile);
+
+            List<ProjectInSolution> projects = solution.ProjectsInOrder.ToList();
+
+            projects.ForEach( project => {
+                using (var scope = _logger.BeginScope(project.ProjectName))
+                {
+                    _logger.LogInformation($"Sorting {project.ProjectName}: Sorting... ");
+                    _projectOrganizer.Run(project.AbsolutePath, null);
+                    _logger.LogInformation($"Sorting {project.ProjectName}: Done. ");
+                }
+            });
+
+            _logger.LogInformation($"All projects sorted.");
+        }
+
+        private string GetSolutionFile(string solutionFile)
+        {
             if (string.IsNullOrWhiteSpace(solutionFile))
             {
                 string cwd = Directory.GetCurrentDirectory();
@@ -48,21 +72,7 @@ namespace CSProjOrganizer
                 solutionFile = solutionFiles.First();
             }
 
-            _logger.LogInformation(solutionFile);
-        }
-
-        private string FindSolutionFile(string path = null)
-        {
-
-
-            return null;
-        }
-
-        private IEnumerable<string> ParseSolutionFile(string solutionFile)
-        {
-            var result = new List<string>();
-
-            return result;
+            return solutionFile;
         }
     }
 }
