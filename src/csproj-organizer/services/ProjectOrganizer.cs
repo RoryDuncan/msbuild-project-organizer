@@ -6,15 +6,25 @@ using CSProjOrganizer.Interfaces;
 
 namespace CSProjOrganizer
 {
-    public class App
+    /// <summary>
+    /// An implementation of IProjectOrganizer
+    /// </summary>
+    public class ProjectOrganizer : IProjectOrganizer
     {
-        private readonly ILogger<App> _logger;
+        private readonly ILogger<ProjectOrganizer> _logger;
         private readonly SortConfiguration _config;
         private readonly IXmlService _xmlService;
         private readonly IGroupingService _groupingService;
 
-        public App(SortConfiguration config,
-                   ILogger<App> logger,
+        /// <summary>
+        /// App constructor
+        /// </summary>
+        /// <param name="config"></param>
+        /// <param name="logger"></param>
+        /// <param name="xmlService"></param>
+        /// <param name="groupingService"></param>
+        public ProjectOrganizer(SortConfiguration config,
+                   ILogger<ProjectOrganizer> logger,
                    IXmlService xmlService,
                    IGroupingService groupingService)
         {
@@ -24,6 +34,7 @@ namespace CSProjOrganizer
             _groupingService = groupingService;
         }
 
+        /// <inheritdoc />
         public void Run(string input, string output)
         {
             if (!IsValid(input))
@@ -36,7 +47,10 @@ namespace CSProjOrganizer
                 output = input;
             }
 
-            _logger.LogInformation($"Sorting '{input}'...");
+            var parts = input.Split(@"\");
+            string fileName = parts[parts.Length - 1];
+
+            _logger.LogInformation($"Sorting '{fileName}'...");
 
             // load the document
             XDocument document = _xmlService.GetDocument(input);
@@ -44,12 +58,12 @@ namespace CSProjOrganizer
 
             if (_config.IsDefault)
             {
-                _logger.LogInformation("Using default configuration");
+                _logger.LogDebug("Using default configuration");
             }
 
             if (_config.SortOptions is null)
             {
-                _logger.LogInformation("Using default sort options");
+                _logger.LogDebug("Using default sort options");
             }
 
             var sortOptions = _config.SortOptions ?? new SortOptions()
@@ -70,15 +84,13 @@ namespace CSProjOrganizer
             }
             else
             {
-                _logger.LogInformation($"No modifications were necessary for '{input}'.");
+                _logger.LogWarning($"No sorting was necessary.");
             }
-
-            _logger.LogInformation("Done.");
         }
 
         private bool IsValid(string input)
         {
-            _logger.LogInformation($"params: {input}");
+            _logger.LogDebug($"params: {input}");
             if (string.IsNullOrWhiteSpace(input))
             {
                 _logger.LogError($"A --input was not provided. Run this application with the name of a .csproj file as the --input arg.");

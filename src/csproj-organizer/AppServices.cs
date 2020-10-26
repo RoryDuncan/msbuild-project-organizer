@@ -10,28 +10,46 @@ using Microsoft.Extensions.Logging;
 
 namespace CSProjOrganizer
 {
+    /// <summary>
+    /// Helper for configuring the services required by <see cref="ProjectOrganizer">ProjectOrganizer</see>
+    /// </summary>
     public class AppServices
     {
-        public static IServiceProvider Configure(string configFile = null)
+        /// <summary>
+        /// Performs setup of our service collection and service provider
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="configFile"></param>
+        /// <returns></returns>
+        public static IServiceProvider Configure(ILoggerFactory logger, string configFile = null)
         {
             IServiceCollection serviceCollection = new ServiceCollection();
 
             // add logging
-            serviceCollection.AddSingleton(new LoggerFactory()
-                .AddConsole()
-                .AddDebug());
+            serviceCollection.AddSingleton(logger);
 
             serviceCollection.AddLogging();
             serviceCollection.AddOptions();
 
             AppServices.AddSortConfiguration(serviceCollection, configFile);
             AppServices.AddServices(serviceCollection);
-            serviceCollection.AddTransient<App>();
+            serviceCollection.AddTransient<ProjectOrganizer>();
+            serviceCollection.AddTransient<SolutionOrganizer>();
 
             // create service provider
             ServiceProvider serviceProvider = serviceCollection.BuildServiceProvider();
 
             return serviceProvider;
+        }
+
+        /// <summary>
+        /// Retrieve the ILoggerFactory
+        /// </summary>
+        public static ILoggerFactory GetLogger()
+        {
+            return new LoggerFactory()
+                .AddConsole(includeScopes: true)
+                .AddDebug();
         }
 
         private static void AddSortConfiguration(IServiceCollection serviceCollection, string configFile)
@@ -71,6 +89,7 @@ namespace CSProjOrganizer
         {
             serviceCollection.AddSingleton<IXmlService, XmlService>();
             serviceCollection.AddSingleton<IGroupingService, GroupingService>();
+            serviceCollection.AddSingleton<IProjectOrganizer, ProjectOrganizer>();
         }
     }
 }

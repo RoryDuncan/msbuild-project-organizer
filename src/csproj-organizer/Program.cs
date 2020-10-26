@@ -1,50 +1,56 @@
-using System.IO;
-using Microsoft.Extensions.Configuration;
+using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using CSProjOrganizer.Models;
-using CSProjOrganizer.Services;
-
-using System.CommandLine;
-using System.CommandLine.Invocation;
-using System;
-using Microsoft.Extensions.Options;
 
 namespace CSProjOrganizer
 {
+    /// <summary>
+    /// Sorts and organizes a .csproj file
+    /// </summary>
     public class Program
     {
-        public static int Main(string[] args)
+        /// <summary>
+        /// Sorts and organizes messy csproj files
+        /// </summary>
+        /// <param name="scan">Scan for a .sln file in the current directory, and organize all associated .csproj files. Other arguments have no effect when using scan</param>
+        /// <param name="input">The csproj file that should be sorted</param>
+        /// <param name="output">The output file path, if the result should be saved to a new file</param>
+        /// <param name="config">The path to a configuration file</param>
+        /// <param name="sln">The path to a specific solution file. This is only necessary if you have multiple .sln files in the current directory.</param>
+        public static void Main(bool scan = false, string input = null, string output = null, string config = null, string sln = null)
         {
-
-            // Create a root command with some options
-            var rootCommand = new RootCommand
+            if (!scan && input is null && output is null && config is null) 
             {
-                new Option<string>("--input", "The csproj file that should be sorted"),
-                new Option<string>("--output", "The output file path, if desired to be separate from the input"),
-                new Option<string>("--config", "The path to a configuration file"),
-            };
+                Console.WriteLine("Use --help to see options.");
+                return;
+            }
 
-            System.Console.Title = AppSettings.ConsoleTitle;
-            rootCommand.Description = AppSettings.Description;
-
-            // Note that the parameters of the handler method are matched according to the names of the options
-            rootCommand.Handler = CommandHandler.Create<string, string, string>((string input, string output, string config) =>
+            // need to wait for logger disposal, or else it won't show the entire log
+            using (var logger = AppServices.GetLogger())
             {
-                Program.AppStart(input, output, config);
-            });
+                // setup services
+                var serviceProvider = AppServices.Configure(logger, scan ? null : config);
 
-            return rootCommand.InvokeAsync(args).Result;
+                if (scan)
+                {
+                    Program.OrganizeSolution(serviceProvider, sln);
+                }
+                else
+                {
+                    Program.OrganizeCSProj(serviceProvider, input, output, config);
+                }
+            }
         }
 
-        private static void AppStart(string input, string output = null, string config = null)
+        private static void OrganizeCSProj(IServiceProvider services, string input, string output = null, string config = null)
         {
-            // setup services
-            var serviceProvider = AppServices.Configure(config);
+            services.GetService<IProjectOrganizer>().Run(input, output);
+        }
 
+        private static void OrganizeSolution(IServiceProvider services, string solutionFile = null)
+        {
+            services.GetService<SolutionOrganizer>().Run(solutionFile);
 
-
-            serviceProvider.GetService<App>().Run(input, output);
         }
     }
 }

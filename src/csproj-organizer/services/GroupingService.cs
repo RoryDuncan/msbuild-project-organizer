@@ -13,6 +13,9 @@ using Microsoft.Extensions.Options;
 namespace CSProjOrganizer.Services
 {
 
+    /// <summary>
+    /// An implementation of IGroupingService
+    /// </summary>
     public class GroupingService : IGroupingService
     {
         private readonly string MSBuildXmlns = "http://schemas.microsoft.com/developer/msbuild/2003";
@@ -21,20 +24,23 @@ namespace CSProjOrganizer.Services
         private readonly SortConfiguration _config;
         private IXmlNameProvider _name;
 
+        /// <summary>
+        /// Create an instance of GroupingService
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="config"></param>
         public GroupingService(ILogger<GroupingService> logger, SortConfiguration config)
         {
             _logger = logger;
             _config = config;
         }
 
-        /// <summary>
-        /// Groups and sorts the XDocument's ItemGroup. Returns a bool indicating if the document was modified or not.
-        /// </summary>
+        /// <inheritdoc />
         public bool Group(XDocument document, SortOptions options)
         {
             if (!HasProjectRoot(document, out XNamespace xmlns))
             {
-                _logger.LogInformation("No <Project> found within document. Nothing to sort.");
+                _logger.LogWarning("No <Project> found within document. Nothing to sort.");
                 return false;
             }
 
@@ -131,14 +137,14 @@ namespace CSProjOrganizer.Services
         }
 
         /// <summary>
-        /// Groups items within ItemGroups into new ItemGroups based on file type and any custom groupings provided in <see cref="AppSettings" />
+        /// Groups items within ItemGroups into new ItemGroups based on file type and any custom groupings provided in <see cref="SortOptions" />
         /// </summary>
         public void GroupByFileType(XDocument document)
         {
             var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
 
             int initialCount = itemGroups.Count;
-            _logger.LogInformation($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
+            _logger.LogDebug($"There {(initialCount == 1 ? "is" : "are")} {initialCount} <ItemGroup> node{(initialCount == 1 ? string.Empty : "s")}");
 
             itemGroups
                 .Where(itemGroup => itemGroup.HasElements && this.IsItemWithFileTypeAttributes(itemGroup.Elements().First()))
@@ -147,7 +153,7 @@ namespace CSProjOrganizer.Services
 
             // log how it's changed
             int resultingCount = projectRoot.Descendants(_name.ItemGroup).ToList().Count;
-            _logger.LogInformation($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
+            _logger.LogDebug($"There {(resultingCount == 1 ? "is" : "are")} {(resultingCount == initialCount ? "still" : "now")} {resultingCount} <ItemGroup> node{(resultingCount == 1 ? string.Empty : "s")}");
         }
 
         /// <summary>
@@ -163,6 +169,10 @@ namespace CSProjOrganizer.Services
                 .ForEach(emptyGroup => emptyGroup.Remove());
         }
 
+        /// <summary>
+        /// Performs a final sort on all items within all ItemGroups
+        /// </summary>
+        /// <param name="document"></param>
         public void SortItemGroupItems(XDocument document)
         {
             var (projectRoot, itemGroups) = GetRootAndItemGroups(document);
@@ -272,7 +282,7 @@ namespace CSProjOrganizer.Services
         }
 
         /// <summary>
-        /// Gets a label of a grouping for a specific filetype, if available. See <see cref="AppSettings.Groupings" />
+        /// Gets a label of a grouping for a specific filetype, if available. See <see cref="SortConfiguration.FileTypeGroupings" />
         /// </summary>
         private bool TryGetGrouping(object configGroup, string value, out string label)
         {

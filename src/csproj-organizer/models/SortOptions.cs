@@ -1,5 +1,8 @@
 namespace CSProjOrganizer.Models
 {
+    /// <summary>
+    /// The options for controlling how sortings are performed
+    /// </summary>
     public class SortOptions
     {
         /// <summary>
