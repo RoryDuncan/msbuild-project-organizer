@@ -3,6 +3,9 @@ using Microsoft.Extensions.Logging;
 
 namespace CSProjOrganizer
 {
+    /// <summary>
+    /// A class for Organizng all Projects within a Solution
+    /// </summary>
     public class SolutionOrganizer
     {
         private readonly ILogger<SolutionOrganizer> _logger;
