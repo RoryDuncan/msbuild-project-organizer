@@ -71,5 +71,5 @@ _Some messy XML_
 ```
 
 You can also see the dogfooding examples:
-- [csproj-organizer/csproj-organizer.csproj](csproj-organizer.csproj)
-- [csproj-organizer/csproj-organizer.tests.csproj](csproj-organizer.test.csproj)
+- [csproj-organizer.csproj](src/csproj-organizer/csproj-organizer.csproj)
+- [csproj-organizer.tests.csproj](src/csproj-organizer/csproj-organizer.tests.csproj)
