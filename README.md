@@ -1,5 +1,5 @@
 # MSBuild Project Organizer
-[![Unit Tests](https://github.com/RoryDuncan/csproj-organizer/workflows/.NET%20Core/badge.svg)](https://github.com/RoryDuncan/csproj-organizer/actions?query=workflow%3A%22.NET+Core%22)
+[![Unit Tests](https://github.com/RoryDuncan/msbuild-project-organizer/workflows/.NET%20Core/badge.svg)](https://github.com/RoryDuncan/msbuild-project-organizer/actions?query=workflow%3A%22.NET+Core%22)
 
 A console application for organizing messy `.csproj` files.
 
