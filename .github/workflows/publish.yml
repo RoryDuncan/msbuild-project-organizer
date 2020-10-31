@@ -1,4 +1,4 @@
-name: publish to nuget
+name: .NET ― Publish to Nuget
 on:
   push:
     branches:
@@ -22,7 +22,7 @@ jobs:
         with:
           # Filepath of the project to be packaged, relative to root of repository
           PROJECT_FILE_PATH: src/csproj-organizer/csproj-organizer.csproj
-          
+
           # NuGet package id, used for version detection & defaults to project name
           PACKAGE_NAME: organize-csproj
 
