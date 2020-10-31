@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CSProjOrganizer.Utilities;
 using Microsoft.Build.Construction;
 using Microsoft.Extensions.Logging;
 
@@ -32,9 +33,14 @@ namespace CSProjOrganizer
         /// </summary>
         public void Run(string solutionFile = null)
         {
-            if (!this.TryGetSolutionFilePath(solutionFile, out string error))
+            var solutionPath = this.GetSolutionFilePath(solutionFile);
+            if (solutionPath.HasValue)
             {
-                _logger.LogWarning(error);
+                solutionFile = solutionPath.Value;
+            }
+            else
+            {
+                _logger.LogWarning(solutionPath.Exception);
                 return;
             }
 
@@ -73,9 +79,8 @@ namespace CSProjOrganizer
             _logger.LogInformation($"All projects sorted.");
         }
 
-        private bool TryGetSolutionFilePath(string solutionFile, out string error)
+        private Either<string, string> GetSolutionFilePath(string solutionFile)
         {
-            error = null;
             if (string.IsNullOrWhiteSpace(solutionFile))
             {
                 string cwd = Directory.GetCurrentDirectory();
@@ -83,20 +88,23 @@ namespace CSProjOrganizer
 
                 if (solutionFiles.Count() > 1)
                 {
-                    error = "Multiple solution files were found in the current directory. Please use the --sln argument to specify the intended solution.";
-                    return false;
+                    return Either<string, string>.Or("Multiple solution files were found in the current directory. Please use the --sln argument to specify the intended solution.");
                 }
 
                 if (solutionFiles.Count() == 0)
                 {
-                    error = "No solution files found in the current directory.";
-                    return false;
+                    return Either<string, string>.Or("No solution files found in the current directory.");
                 }
 
                 solutionFile = solutionFiles.First();
             }
 
-            return true;
+            if (!File.Exists(solutionFile))
+            {
+                return Either<string, string>.Or($"File does not exist: '{solutionFile}'");
+            }
+
+            return Either<string, string>.WithoutException(solutionFile);
         }
 
         private SolutionFile GetSolutionFromPath(string filePath)
