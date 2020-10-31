@@ -3,4 +3,4 @@ obj/
 testfile.xml
 testfile.sorted.xml
 testfile-config.json
-package/*.nupkg
+*.nupkg
