@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSProjOrganizer", "csproj-organizer\csproj-organizer.csproj", "{B4842C2B-527C-4177-B521-71428069B161}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSProjOrganizer", "msbuild-project-organizer\msbuild-project-organizer.csproj", "{B4842C2B-527C-4177-B521-71428069B161}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSProjOrganizer.Tests", "csproj-organizer.tests\csproj-organizer.tests.csproj", "{1DA67FDE-4B07-403E-BA11-BBFF84BAD07A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSProjOrganizer.Tests", "msbuild-project-organizer.tests\msbuild-project-organizer.tests.csproj", "{1DA67FDE-4B07-403E-BA11-BBFF84BAD07A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

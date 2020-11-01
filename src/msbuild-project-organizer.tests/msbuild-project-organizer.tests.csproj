@@ -21,6 +21,6 @@
   </ItemGroup>
   <!-- Project References -->
   <ItemGroup>
-    <ProjectReference Include="..\csproj-organizer\csproj-organizer.csproj" />
+    <ProjectReference Include="..\msbuild-project-organizer\msbuild-project-organizer.csproj" />
   </ItemGroup>
 </Project>

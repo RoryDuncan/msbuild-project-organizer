@@ -5,7 +5,7 @@
     "tasks": [
         {
             "label": "Build Solution",
-            "detail": "Builds 'csproj-organizer' and 'csproj-organizer.tests' projects",
+            "detail": "Builds 'msbuild-project-organizer' and 'msbuild-project-organizer.tests' projects",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -27,7 +27,7 @@
         },
         {
             "label": "Build Project",
-            "detail": "Builds the csproj-organizer project",
+            "detail": "Builds the msbuild-project-organizer project",
             "command": "dotnet",
             "type": "shell",
             "args": [
@@ -35,7 +35,7 @@
                 "--nologo"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/src/csproj-organizer"
+                "cwd": "${workspaceFolder}/src/msbuild-project-organizer"
             },
             "group": "build",
             "presentation": {
@@ -91,7 +91,7 @@
                 "run",
             ],
             "options": {
-                "cwd": "${workspaceFolder}/src/csproj-organizer"
+                "cwd": "${workspaceFolder}/src/msbuild-project-organizer"
             },
             "group": "build",
             "presentation": {
@@ -105,7 +105,7 @@
             "type": "shell",
             "args": [
                 "publish",
-                "csproj-organizer/csproj-organizer.csproj"
+                "msbuild-project-organizer/msbuild-project-organizer.csproj"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/src"
@@ -123,10 +123,10 @@
             "args": [
                 "CSProjOrganizer.dll",
                 "--input",
-                "${workspaceFolder}/src/csproj-organizer/csproj-organizer.csproj"
+                "${workspaceFolder}/src/msbuild-project-organizer/msbuild-project-organizer.csproj"
             ],
             "options": {
-                "cwd": "${workspaceFolder}/src/csproj-organizer/bin/Debug/netcoreapp3.1"
+                "cwd": "${workspaceFolder}/src/msbuild-project-organizer/bin/Debug/netcoreapp3.1"
             },
             "group": "none",
             "presentation": {
@@ -185,7 +185,7 @@
             "type": "shell",
             "dependsOn": ["Build Solution"],
             "options": {
-                "cwd": "${workspaceFolder}/src/csproj-organizer"
+                "cwd": "${workspaceFolder}/src/msbuild-project-organizer"
             },
             "args": [
                 "run",
