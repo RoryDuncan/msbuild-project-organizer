@@ -62,9 +62,9 @@ dotnet organize-csproj --input=project.csproj --output=project.sorted.csproj --c
 
 ## Configuration
 
-The default configuration can be seen here: [csproj.config.defaults.json](CSProjOrganizer/csproj.config.defaults.json)
+The default configuration can be seen here: [csproj.config.defaults.json](MSBuildProjectOrganizer/csproj.config.defaults.json)
 It should work as a solid reference to get yourself started.
-The configuration needs to map to [SortConfiguration.cs](CSProjOrganizer/Models/SortConfiguration.cs).
+The configuration needs to map to [SortConfiguration.cs](MSBuildProjectOrganizer/Models/SortConfiguration.cs).
 
 If this isn't sufficient documentation, open an issue and I'll write out more.
 

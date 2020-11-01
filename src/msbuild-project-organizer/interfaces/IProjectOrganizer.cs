@@ -1,4 +1,4 @@
-namespace CSProjOrganizer
+namespace MSBuildProjectOrganizer
 {
     /// <summary>
     /// An interface for organizing Project files (.csproj)

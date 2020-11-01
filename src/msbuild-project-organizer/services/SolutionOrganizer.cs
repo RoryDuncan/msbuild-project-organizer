@@ -2,11 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CSProjOrganizer.Utilities;
+using MSBuildProjectOrganizer.Utilities;
 using Microsoft.Build.Construction;
 using Microsoft.Extensions.Logging;
 
-namespace CSProjOrganizer
+namespace MSBuildProjectOrganizer
 {
     /// <summary>
     /// A class for Organizng all Projects within a Solution

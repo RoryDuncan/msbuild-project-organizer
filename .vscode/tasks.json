@@ -121,7 +121,7 @@
             "command": "dotnet",
             "type": "shell",
             "args": [
-                "CSProjOrganizer.dll",
+                "MSBuildProjectOrganizer.dll",
                 "--input",
                 "${workspaceFolder}/src/msbuild-project-organizer/msbuild-project-organizer.csproj"
             ],

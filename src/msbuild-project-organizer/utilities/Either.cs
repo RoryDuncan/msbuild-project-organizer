@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CSProjOrganizer.Utilities
+namespace MSBuildProjectOrganizer.Utilities
 {
 
     /// <summary>

@@ -1,7 +1,7 @@
 using System.Xml.Linq;
-using CSProjOrganizer.Interfaces;
+using MSBuildProjectOrganizer.Interfaces;
 
-namespace CSProjOrganizer.Services
+namespace MSBuildProjectOrganizer.Services
 {
     /// <summary>
     /// An implementation of IXmlNameProvider

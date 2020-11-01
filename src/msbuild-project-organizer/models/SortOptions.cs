@@ -1,4 +1,4 @@
-namespace CSProjOrganizer.Models
+namespace MSBuildProjectOrganizer.Models
 {
     /// <summary>
     /// The options for controlling how sortings are performed
