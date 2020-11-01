@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using CSProjOrganizer.Utilities;
 using Microsoft.Build.Construction;
 using Microsoft.Extensions.Logging;
 
@@ -17,7 +18,7 @@ namespace CSProjOrganizer
         private readonly string solutionGlob = "*.sln";
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="projectOrganizer"></param>
@@ -32,27 +33,52 @@ namespace CSProjOrganizer
         /// </summary>
         public void Run(string solutionFile = null)
         {
-            solutionFile = this.GetSolutionFile(solutionFile);
+            var solutionPath = this.GetSolutionFilePath(solutionFile);
+            if (solutionPath.HasValue)
+            {
+                solutionFile = solutionPath.Value;
+            }
+            else
+            {
+                _logger.LogWarning(solutionPath.Exception);
+                return;
+            }
+
 
             _logger.LogDebug($"Solution file found: {solutionFile}");
 
-            SolutionFile solution = SolutionFile.Parse(solutionFile);
+            SolutionFile solution = GetSolutionFromPath(solutionFile);
 
             List<ProjectInSolution> projects = solution.ProjectsInOrder.ToList();
 
             projects.ForEach( project => {
                 using (var scope = _logger.BeginScope(project.ProjectName))
                 {
-                    _logger.LogInformation($"Sorting {project.ProjectName}: Sorting... ");
-                    _projectOrganizer.Run(project.AbsolutePath, null);
-                    _logger.LogInformation($"Sorting {project.ProjectName}: Done. ");
+                    try
+                    {
+                        if (project.AbsolutePath.EndsWith(".csproj"))
+                        {
+                            _logger.LogInformation($"Sorting {project.ProjectName}: Sorting... ");
+                            _projectOrganizer.Run(project.AbsolutePath, null);
+                            _logger.LogInformation($"Sorting {project.ProjectName}: Done. ");
+                        }
+                        else
+                        {
+                            _logger.LogWarning($"{project.ProjectName} does not have a project file.");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning($"Unable to sort {project.ProjectName}: {ex.Message}");
+                    }
                 }
             });
 
             _logger.LogInformation($"All projects sorted.");
         }
 
-        private string GetSolutionFile(string solutionFile)
+        private Either<string, string> GetSolutionFilePath(string solutionFile)
         {
             if (string.IsNullOrWhiteSpace(solutionFile))
             {
@@ -61,18 +87,31 @@ namespace CSProjOrganizer
 
                 if (solutionFiles.Count() > 1)
                 {
-                    throw new System.Exception("Multiple solution files were found in the current directory. Please use the --solution argument to specify the intended solution.");
+                    return Either<string, string>.Or("Multiple solution files were found in the current directory. Please use the --sln argument to specify the intended solution.");
                 }
 
                 if (solutionFiles.Count() == 0)
                 {
-                    throw new FileNotFoundException("No solution files found in the current directory.");
+                    return Either<string, string>.Or("No solution files found in the current directory.");
                 }
 
                 solutionFile = solutionFiles.First();
             }
 
-            return solutionFile;
+            if (!File.Exists(solutionFile))
+            {
+                return Either<string, string>.Or($"File does not exist: '{solutionFile}'");
+            }
+
+            return Either<string, string>.WithoutException(solutionFile);
+        }
+
+        private SolutionFile GetSolutionFromPath(string filePath)
+        {
+            // need an absolute path otherwise SolutionFile.Parse will
+            // throw an "unexpectedly not a rooted path" exception
+            string absolutePath = Path.GetFullPath(filePath);
+            return SolutionFile.Parse(absolutePath);
         }
     }
 }

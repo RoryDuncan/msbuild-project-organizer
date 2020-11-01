@@ -6,7 +6,7 @@
   </PropertyGroup>
   <!-- Published Files -->
   <ItemGroup Label=".csproj files">
-    <Content Include="files/*.csproj">
+    <Content Include="files/**/*">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
