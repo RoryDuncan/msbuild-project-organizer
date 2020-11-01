@@ -2,14 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
-using CSProjOrganizer.Interfaces;
-using CSProjOrganizer.Models;
-using CSProjOrganizer.Services;
+using MSBuildProjectOrganizer.Interfaces;
+using MSBuildProjectOrganizer.Models;
+using MSBuildProjectOrganizer.Services;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 
-namespace CSProjOrganizer.Tests
+namespace MSBuildProjectOrganizer.Tests
 {
     public class GroupingServiceTests
     {

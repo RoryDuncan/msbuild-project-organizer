@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace CSProjOrganizer.Models
+namespace MSBuildProjectOrganizer.Models
 {
     /// <summary>
     /// Configuration for sorting

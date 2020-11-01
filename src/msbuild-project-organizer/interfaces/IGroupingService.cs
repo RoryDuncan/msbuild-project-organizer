@@ -1,7 +1,7 @@
 using System.Xml.Linq;
-using CSProjOrganizer.Models;
+using MSBuildProjectOrganizer.Models;
 
-namespace CSProjOrganizer.Interfaces
+namespace MSBuildProjectOrganizer.Interfaces
 {
     /// <summary>
     /// A service for grouping the nodes within an XML document

@@ -1,12 +1,12 @@
 using System.IO;
 using System.Xml;
 using System.Xml.Linq;
-using CSProjOrganizer.Interfaces;
-using CSProjOrganizer.Models;
+using MSBuildProjectOrganizer.Interfaces;
+using MSBuildProjectOrganizer.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace CSProjOrganizer.Services
+namespace MSBuildProjectOrganizer.Services
 {
     /// <summary>
     /// Implementation of IXMLService

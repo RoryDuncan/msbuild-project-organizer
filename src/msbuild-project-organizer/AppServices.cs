@@ -1,14 +1,14 @@
 using System;
 using System.IO;
 using System.Text.Json;
-using CSProjOrganizer.Interfaces;
-using CSProjOrganizer.Models;
-using CSProjOrganizer.Services;
+using MSBuildProjectOrganizer.Interfaces;
+using MSBuildProjectOrganizer.Models;
+using MSBuildProjectOrganizer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CSProjOrganizer
+namespace MSBuildProjectOrganizer
 {
     /// <summary>
     /// Helper for configuring the services required by <see cref="ProjectOrganizer">ProjectOrganizer</see>

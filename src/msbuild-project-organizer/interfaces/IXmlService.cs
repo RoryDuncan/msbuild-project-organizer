@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace CSProjOrganizer.Interfaces
+namespace MSBuildProjectOrganizer.Interfaces
 {
     /// <summary>
     /// Service for reading and writing XML documents

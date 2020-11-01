@@ -2,7 +2,7 @@ using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace CSProjOrganizer
+namespace MSBuildProjectOrganizer
 {
     /// <summary>
     /// Sorts and organizes a .csproj file

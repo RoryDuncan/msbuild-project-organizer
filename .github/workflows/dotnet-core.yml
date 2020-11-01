@@ -18,8 +18,8 @@ jobs:
       with:
         dotnet-version: 3.1.301
     - name: Install dependencies
-      run: dotnet restore src/csproj-organizer.sln
+      run: dotnet restore src/msbuild-project-organizer.sln
     - name: Build
-      run: dotnet build --no-restore src/csproj-organizer.sln
+      run: dotnet build --no-restore src/msbuild-project-organizer.sln
     - name: Test
-      run: dotnet test --no-restore --verbosity normal src/csproj-organizer.sln
+      run: dotnet test --no-restore --verbosity normal src/msbuild-project-organizer.sln

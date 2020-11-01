@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+  <!-- Published Files -->
+  <ItemGroup Label=".csproj files">
+    <Content Include="files/**/*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <!-- NuGet Package References -->
+  <ItemGroup>
+    <PackageReference Include="Moq" Version="4.14.6" />
+    <PackageReference Include="xunit" Version="2.4.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.8" />
+    <PackageReference Include="coverlet.collector" Version="1.2.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.0" />
+  </ItemGroup>
+  <!-- Project References -->
+  <ItemGroup>
+    <ProjectReference Include="..\msbuild-project-organizer\msbuild-project-organizer.csproj" />
+  </ItemGroup>
+</Project>

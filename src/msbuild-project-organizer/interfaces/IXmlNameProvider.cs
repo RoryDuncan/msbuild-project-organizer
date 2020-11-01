@@ -1,6 +1,6 @@
 using System.Xml.Linq;
 
-namespace CSProjOrganizer.Interfaces
+namespace MSBuildProjectOrganizer.Interfaces
 {
     /// <summary>
     /// A service for resolving the current name of XML nodes and attributes based on the context

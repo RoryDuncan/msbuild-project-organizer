@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using CSProjOrganizer.Models;
+using MSBuildProjectOrganizer.Models;
 using System.Xml.Linq;
-using CSProjOrganizer.Interfaces;
+using MSBuildProjectOrganizer.Interfaces;
 
-namespace CSProjOrganizer
+namespace MSBuildProjectOrganizer
 {
     /// <summary>
     /// An implementation of IProjectOrganizer
