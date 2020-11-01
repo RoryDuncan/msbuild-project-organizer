@@ -56,7 +56,6 @@ namespace CSProjOrganizer
                 {
                     try
                     {
-                        _logger.LogInformation($"Sorting {project.ProjectName}: Sorting... ");
                         if (project.AbsolutePath.EndsWith(".csproj"))
                         {
                             _logger.LogInformation($"Sorting {project.ProjectName}: Sorting... ");
@@ -65,7 +64,7 @@ namespace CSProjOrganizer
                         }
                         else
                         {
-                            _logger.LogInformation($"{project.ProjectName} does not have a project file.");
+                            _logger.LogWarning($"{project.ProjectName} does not have a project file.");
                         }
 
                     }
